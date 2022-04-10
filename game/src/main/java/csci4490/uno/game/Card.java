@@ -1,4 +1,4 @@
-package game_components;
+package csci4490.uno.game;
 
 abstract class Card {
 	

@@ -1,4 +1,4 @@
-package game_components;
+package csci4490.uno.game;
 
 public class Draw4Card extends WildCard {
 	

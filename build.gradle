@@ -1,5 +1,5 @@
 subprojects {
-    apply plugin: 'application'
+    apply plugin: 'java-library'
 
     group 'csci4490.uno'
     version '0.0.1-SNAPSHOT'
