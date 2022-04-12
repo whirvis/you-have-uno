@@ -4,6 +4,7 @@ abstract class Card {
 	
 	protected String color;
 	protected String value;
+	int score_value;
 	
 	public Card()
 	{
@@ -21,7 +22,24 @@ abstract class Card {
 		return value;
 	}
 	
+	public int getScoreValue()
+	{
+		return score_value;
+	}
+	
+	void setScoreValue(int points)
+	{
+		score_value = points;
+	}
+	
+	
 	abstract public Boolean matchCard(Card card);
+	abstract public String applyCardEffect();
+	
+	public String toString()
+	{
+		return color + ", " + value + " ," + applyCardEffect();
+	}
 	
 	
 

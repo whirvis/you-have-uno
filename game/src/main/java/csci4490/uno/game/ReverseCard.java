@@ -5,6 +5,7 @@ public class ReverseCard extends SpecialCard {
 	public ReverseCard(String color, String value) {
 		super(color, value);
 		
+		
 	}
 
 	@Override

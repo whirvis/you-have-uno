@@ -5,6 +5,8 @@ public class SkipCard extends SpecialCard {
 	public SkipCard(String color, String value) {
 		super(color, value);
 		
+		
+		
 	}
 
 	@Override

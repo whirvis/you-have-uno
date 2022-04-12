@@ -1,8 +1,13 @@
 package csci4490.uno.game;
 
-abstract class WildCard extends Card{
-
+class WildCard extends Card{
 	
+	public WildCard(String value)
+	{
+		super();
+		this.value = value;
+		setScoreValue(50);
+	}
 	@Override
 	public Boolean matchCard(Card card) {
 		
@@ -16,6 +21,11 @@ abstract class WildCard extends Card{
 	public void setColor(String color)
 	{
 		this.color = color;
+	}
+	@Override
+	public String applyCardEffect() {
+		// TODO Auto-generated method stub
+		return "WILD";
 	}
 
 }

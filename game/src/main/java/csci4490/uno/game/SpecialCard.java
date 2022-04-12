@@ -1,16 +1,17 @@
 package csci4490.uno.game;
 
-abstract class SpecialCard extends RegularCard{
+abstract class SpecialCard extends Card{
 
 	public SpecialCard(String color, String value) {
-		super(color, value);
-		// TODO Auto-generated constructor stub
+		this.color = color;
+		this.value = value;
+		setScoreValue(20);
 	}
 
 	@Override
 	public Boolean matchCard(Card card) {
 
-		if (card.getColor().equals(this.getColor()) || card.getValue() == this.getValue())
+		if (card.getColor().equals(this.getColor()) || card.getValue() == this.getValue() || card.getValue().equals("WILD"))
 		{
 			return true;
 		}
@@ -18,6 +19,6 @@ abstract class SpecialCard extends RegularCard{
 		return false;
 	}
 	
-	abstract public String applyCardEffect();
+	
 	
 }
