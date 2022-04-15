@@ -9,7 +9,7 @@ public class Game
 	private int gameCode;
 	private int numberOfGames;
 	
-	public Game()
+	public Game(int numPlayers)
 	{
 		
 	}
@@ -17,6 +17,11 @@ public class Game
 	public void start()
 	{
 		
+	}
+	
+	public String playTurn()
+	{
+		return null;
 	}
 	
 	private void reverseDirection()

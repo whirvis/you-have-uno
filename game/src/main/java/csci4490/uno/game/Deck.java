@@ -5,56 +5,48 @@ import java.util.Collections;
 
 public class Deck 
 {
-	private ArrayList<Card> playDeck;
-	private ArrayList<Card> discards;
+	final private ArrayList<Card> playDeck;
+	final private ArrayList<Card> discards;
 	ArrayList<Hand> hands;
-	private Hand hand1;
-	private Hand hand2;
-	private Hand hand3;
-	private Hand hand4;
-	private String red = "RED";
-	private String blue = "BLUE";
-	private String green = "GREEN";
-	private String yellow = "YELLOW";
-	private String drawTwo = "DRAW_TWO";
-	private String skip = "SKIP";
-	private String reverse = "REVERSE";
-	private String wild = "WILD";
-	private String zero = "0";
-	private String one = "1";
-	private String two = "2";
-	private String three = "3";
-	private String four = "4";
-	private String five = "5";
-	private String six = "6";
-	private String seven = "7";
-	private String eight = "8";
-	private String nine = "9";
+	int numHands;
+
 	
-	
-	public Deck()
+	public Deck(int numHands)
 	{
+		final String red = "RED";
+		final String blue = "BLUE";
+		final String green = "GREEN";
+		final String yellow = "YELLOW";
+		final String drawTwo = "DRAW_TWO";
+		final String skip = "SKIP";
+		final String reverse = "REVERSE";
+		final String wild = "WILD";
+		final String zero = "0";
+		final String one = "1";
+		final String two = "2";
+		final String three = "3";
+		final String four = "4";
+		final String five = "5";
+		final String six = "6";
+		final String seven = "7";
+		final String eight = "8";
+		final String nine = "9";
 		playDeck = new ArrayList<Card>();
 		discards = null;
 		
 		hands = new ArrayList<Hand>();
-		hand1 = new Hand(this);
-		hand2 = new Hand(this);
-		hand3 = new Hand(this);
-		hand4 = new Hand(this);
-		hands.add(0,hand1);
-		hands.add(1,hand2);
-		hands.add(2,hand3);
-		hands.add(3,hand4);
-		
+		this.numHands = numHands;
+
+		for (int i = 0; i < numHands; i++)
+		{
+			hands.add(new Hand(this));
+		}
+
 		playDeck.add(new RegularCard(red, zero));
 		playDeck.add(new RegularCard(blue,zero));
 		playDeck.add(new RegularCard(green,zero));
 		playDeck.add(new RegularCard(yellow, zero));
-		
-		
-		
-		
+
 		
 		for (int i = 0; i < 4; i++)
 		{
@@ -117,9 +109,7 @@ public class Deck
 			playDeck.add(new RegularCard(green, seven));
 			playDeck.add(new RegularCard(green, eight));
 			playDeck.add(new RegularCard(green, nine));
-			
-			
-			
+
 		}
 		
 		shuffle();
@@ -130,15 +120,11 @@ public class Deck
 	{
 		for (int i = 0; i < 7; i++)
 		{
-			
-			hand1.addCard(playDeck.get(0));
-			playDeck.remove(0);
-			hand2.addCard(playDeck.get(0));
-			playDeck.remove(0);
-			hand3.addCard(playDeck.get(0));
-			playDeck.remove(0);
-			hand4.addCard(playDeck.get(0));
-			playDeck.remove(0);
+			for (int j = 0; j < numHands; j++)
+			{
+				hands.get(j).addCard(playDeck.get(0));
+				playDeck.remove(0);
+			}
 		}	
 		
 	}
