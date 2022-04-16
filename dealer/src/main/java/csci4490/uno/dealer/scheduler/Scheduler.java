@@ -117,7 +117,8 @@ public abstract class Scheduler implements Closeable {
      */
     /* @formatter:off */
     public final @NotNull ScheduledJob
-            schedule(@NotNull Runnable runner, int executeCount,
+            schedule(@NotNull JobRunnable.NoParams runner,
+                     int executeCount,
                      @NotNull Duration initialDelay,
                      @NotNull Duration repeatDelay) {
         Objects.requireNonNull(runner, "runner cannot be null");
@@ -135,10 +136,13 @@ public abstract class Scheduler implements Closeable {
      * @throws NullPointerException if {@code runner} or {@code delay}
      *                              are {@code null}.
      */
-    public final @NotNull ScheduledJob schedule(@NotNull Runnable runner,
-                                                @NotNull Duration delay) {
+    /* @formatter:off */
+    public final @NotNull ScheduledJob
+            schedule(@NotNull JobRunnable.NoParams runner,
+                     @NotNull Duration delay) {
         return this.schedule(runner, 1, delay, Duration.ZERO);
     }
+    /* @formatter:on */
 
     /**
      * Schedules a job to run as soon as possible.
@@ -147,9 +151,12 @@ public abstract class Scheduler implements Closeable {
      * @return the scheduled job.
      * @throws NullPointerException if {@code runner} is {@code null}.
      */
-    public final @NotNull ScheduledJob schedule(@NotNull Runnable runner) {
+    /* @formatter:off */
+    public final @NotNull ScheduledJob
+            schedule(@NotNull JobRunnable.NoParams runner) {
         return this.schedule(runner, Duration.ZERO);
     }
+    /* @formatter:on */
 
     /**
      * Schedules a job to run forever. Execution of a job can be halted via
@@ -167,7 +174,7 @@ public abstract class Scheduler implements Closeable {
      */
     /* @formatter:off */
     public final @NotNull ScheduledJob
-            scheduleForever(@NotNull Runnable runner,
+            scheduleForever(@NotNull JobRunnable.NoParams runner,
                             @NotNull Duration initialDelay,
                             @NotNull Duration repeatDelay) {
         return this.schedule(runner, ScheduledJob.EXECUTE_FOREVER,
