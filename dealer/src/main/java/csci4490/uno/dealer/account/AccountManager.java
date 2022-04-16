@@ -1,7 +1,5 @@
 package csci4490.uno.dealer.account;
 
-import csci4490.uno.dealer.account.DbUnoAccount;
-import csci4490.uno.dealer.account.UnoAccount;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
