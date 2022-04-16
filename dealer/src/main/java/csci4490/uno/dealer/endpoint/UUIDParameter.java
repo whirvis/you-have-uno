@@ -1,15 +1,14 @@
 package csci4490.uno.dealer.endpoint;
 
+import io.javalin.http.BadRequestResponse;
 import io.javalin.http.Context;
-import io.javalin.http.HttpCode;
-import io.javalin.http.HttpResponseException;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.UUID;
 
 /**
- * Represents a UUI parameter that could be present in an endpoint.
+ * Represents a {@link UUID} parameter present in an endpoint.
  * Only the first argument for this parameter will be returned.
  */
 public class UUIDParameter extends EndpointParameter<UUID> {
@@ -24,11 +23,12 @@ public class UUIDParameter extends EndpointParameter<UUID> {
 
     @Override
     protected UUID decode(@NotNull Context ctx, @NotNull List<String> values) {
+        String str = values.get(0);
         try {
-            return UUID.fromString(values.get(0));
+            return UUID.fromString(str);
         } catch (IllegalArgumentException e) {
-            int status = HttpCode.BAD_REQUEST.getStatus();
-            throw new HttpResponseException(status, e.getMessage());
+            String msg = "Invalid UUID: " + str;
+            throw new BadRequestResponse(msg);
         }
     }
 

@@ -46,6 +46,7 @@ public class AccountManager {
     }
 
     private final Connection db;
+    private final WebAccountManager webManager;
 
     /**
      * @param db the database connection.
@@ -53,6 +54,11 @@ public class AccountManager {
      */
     public AccountManager(@NotNull Connection db) {
         this.db = Objects.requireNonNull(db, "db cannot be null");
+        this.webManager = new WebAccountManager(this);
+    }
+
+    public @NotNull WebAccountManager getWebManager() {
+        return this.webManager;
     }
 
     private @NotNull UUID findAvailableId() throws SQLException {
