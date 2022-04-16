@@ -176,7 +176,7 @@ public class AccountManager {
         Objects.requireNonNull(username, "username cannot be null");
         Objects.requireNonNull(password, "password cannot be null");
 
-        if (!this.usernameExists(username)) {
+        if (this.usernameExists(username)) {
             throw new SQLException("account with username exists");
         }
 
