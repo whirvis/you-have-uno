@@ -4,10 +4,15 @@ import io.javalin.Javalin;
 import io.javalin.http.Context;
 import io.javalin.http.HandlerType;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Parameter;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 public final class Endpoints {
@@ -15,6 +20,26 @@ public final class Endpoints {
     private Endpoints() {
         /* static class */
     }
+
+    /* @formatter:off */
+    private static void
+            invokeMethod(@NotNull Context ctx, @NotNull Method method,
+                         @Nullable Object instance) throws Exception {
+        try {
+            method.invoke(instance, ctx);
+        } catch (InvocationTargetException e) {
+            /*
+             * If the invoked method throws an exception, we want
+             * Javalin to catch it. It might be an instance of a
+             * HttpResponseException!
+             */
+            Throwable cause = e.getCause();
+            if (cause instanceof Exception) {
+                throw (Exception) cause;
+            }
+        }
+    }
+    /* @formatter:on */
 
     /**
      * Registers all methods of an object annotated with {@link Endpoint}
@@ -34,15 +59,29 @@ public final class Endpoints {
      *                                  parameter, or the type of the first
      *                                  parameter is not {@link Context}.
      */
-    public static void register(@NotNull Javalin javalin,
-                                @NotNull Object obj) {
+    public static void register(@NotNull Javalin javalin, @NotNull Object obj) {
         Objects.requireNonNull(javalin, "javalin cannot be null");
         Objects.requireNonNull(obj, "obj cannot be null");
 
-        boolean doStaticMethods = obj instanceof Class;
+        Class<?> clazz;
+        Object instance;
+        boolean doStaticMethods;
+        if (obj instanceof Class) {
+            clazz = (Class<?>) obj;
+            instance = null;
+            doStaticMethods = true;
+        } else {
+            clazz = obj.getClass();
+            instance = obj;
+            doStaticMethods = false;
+        }
+
+        List<Method> methods = new ArrayList<>();
+        Collections.addAll(methods, clazz.getMethods());
+        Collections.addAll(methods, clazz.getDeclaredMethods());
 
         int endpointsRegistered = 0;
-        for (Method method : obj.getClass().getDeclaredMethods()) {
+        for (Method method : methods) {
             Endpoint annotation = method.getAnnotation(Endpoint.class);
             if (annotation == null) {
                 return; /* annotation not present */
@@ -100,9 +139,13 @@ public final class Endpoints {
                 throw new EndpointException(msg);
             }
 
+            /* @formatter:off */
             HandlerType type = annotation.type();
             String path = annotation.path();
-            javalin.addHandler(type, path, (ctx) -> method.invoke(obj, ctx));
+            javalin.addHandler(type, path,
+                    ctx -> invokeMethod(ctx, method, instance));
+            /* @formatter:on */
+
             endpointsRegistered++;
         }
 
