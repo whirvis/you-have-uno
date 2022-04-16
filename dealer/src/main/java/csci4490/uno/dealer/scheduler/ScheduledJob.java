@@ -47,8 +47,8 @@ public final class ScheduledJob {
                 "repeatDelay cannot be null");
         /* @formatter:on */
 
-        if (executeCount < 1) {
-            String msg = "executeCount must be at least one";
+        if (executeCount == 0) {
+            String msg = "executeCount must be at least one or negative";
             throw new IllegalArgumentException(msg);
         }
 
