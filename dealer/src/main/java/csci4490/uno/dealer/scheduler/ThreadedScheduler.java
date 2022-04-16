@@ -43,4 +43,18 @@ public class ThreadedScheduler extends Scheduler {
         return scheduled;
     }
 
+    @Override
+    public void close() {
+        if (this.isClosed()) {
+            return;
+        }
+
+        if (thread != null) {
+            thread.interrupt();
+            this.thread = null;
+        }
+
+        super.close();
+    }
+
 }

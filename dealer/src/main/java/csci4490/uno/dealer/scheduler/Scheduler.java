@@ -1,9 +1,12 @@
 package csci4490.uno.dealer.scheduler;
 
+import org.jetbrains.annotations.MustBeInvokedByOverriders;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.Closeable;
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
@@ -14,9 +17,10 @@ import java.util.Objects;
  * @see #schedule(JobRunnable, int, Duration, Duration)
  * @see #scheduleForever(JobRunnable, Duration, Duration)
  */
-public abstract class Scheduler {
+public abstract class Scheduler implements Closeable {
 
     protected final List<ScheduledJob> jobs;
+    private boolean closed;
 
     public Scheduler() {
         this.jobs = new ArrayList<>();
@@ -170,5 +174,28 @@ public abstract class Scheduler {
                 initialDelay, repeatDelay);
     }
     /* @formatter:on */
+
+    public final boolean isClosed() {
+        return this.closed;
+    }
+
+    @Override
+    @MustBeInvokedByOverriders
+    public void close() {
+        if (this.isClosed()) {
+            return;
+        }
+
+        synchronized (jobs) {
+            Iterator<ScheduledJob> jobsI = jobs.iterator();
+            while (jobsI.hasNext()) {
+                ScheduledJob job = jobsI.next();
+                job.cancel();
+                jobsI.remove();
+            }
+        }
+
+        this.closed = true;
+    }
 
 }
