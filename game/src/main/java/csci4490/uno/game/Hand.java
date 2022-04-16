@@ -23,11 +23,7 @@ public class Hand
 		score += c.getScoreValue();
 	}
 	
-	public void pullCard()
-	{
-		playDeck.addToHand();
-		addCard(playDeck.addToHand());
-	}
+	
 		
 	public void removeCard(Card c)
 	{

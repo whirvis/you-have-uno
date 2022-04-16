@@ -133,16 +133,19 @@ public class Deck
 	{
 		
 		discards.add(c);
-		playDeck.remove((Object)c);
 		
 		
 	}
 	
-	public Card addToHand()
+	public void removeCard(Card c)
 	{
-		Card toReturn = playDeck.get(0);
-		playDeck.remove(0);
-		return toReturn;
+		playDeck.remove(c);
+	}
+	
+	public void addToHand(Hand h, Card c)
+	{
+		h.addCard(c);
+		playDeck.remove(c);
 		
 	}
 	
@@ -166,6 +169,10 @@ public class Deck
 		Collections.shuffle(playDeck);
 	}
 	
+	public Card getFaceUp()
+	{
+		return playDeck.get(0);
+	}
 	
 	
 	public ArrayList<Hand> getHands()
