@@ -136,6 +136,30 @@ public class AccountManager {
     }
 
     /**
+     * @param uuid the UUID of the account.
+     * @return the account with the specified UUID, {@code null} if no such
+     * account exists.
+     * @throws NullPointerException if {@code uuid} is {@code null}.
+     * @throws SQLException         if an SQL error occurs.
+     */
+    public @Nullable UnoAccount getAccount(@NotNull UUID uuid) throws SQLException {
+        Objects.requireNonNull(uuid, "uuid cannot be null");
+
+        String sql = "SELECT * FROM account WHERE uuid = ?";
+        try (PreparedStatement stmt = db.prepareStatement(sql)) {
+            stmt.setString(1, uuid.toString());
+
+            ResultSet query = stmt.executeQuery();
+            if (!query.next()) {
+                return null; /* no such account */
+            }
+
+            String username = query.getString("username");
+            return new DbUnoAccount(uuid, username);
+        }
+    }
+
+    /**
      * @param username the username of the account.
      * @param password the password. For security reasons, this should be
      *                 discarded from memory as quickly as possible. This
