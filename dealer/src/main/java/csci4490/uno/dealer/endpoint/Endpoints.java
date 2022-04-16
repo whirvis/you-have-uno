@@ -24,13 +24,15 @@ public final class Endpoints {
      *
      * @param javalin the webserver to add handlers to.
      * @param obj     the object whose methods to register.
-     * @throws NullPointerException if {@code javalin} or {@code obj}
-     *                              are {@code null}.
-     * @throws EndpointException    if an {@link Endpoint} annotated method
-     *                              is {@code public}, does not return type
-     *                              {@code void}, does not take only one
-     *                              parameter, or the type of the first
-     *                              parameter is not {@link Context}.
+     * @throws NullPointerException     if {@code javalin} or {@code obj}
+     *                                  are {@code null}.
+     * @throws IllegalArgumentException if {@code obj} had no {@link Endpoint}
+     *                                  annotated methods to register.
+     * @throws EndpointException        if an {@link Endpoint} annotated method
+     *                                  is {@code public}, does not return type
+     *                                  {@code void}, does not take only one
+     *                                  parameter, or the type of the first
+     *                                  parameter is not {@link Context}.
      */
     public static void register(@NotNull Javalin javalin,
                                 @NotNull Object obj) {
@@ -39,6 +41,7 @@ public final class Endpoints {
 
         boolean doStaticMethods = obj instanceof Class;
 
+        int endpointsRegistered = 0;
         for (Method method : obj.getClass().getDeclaredMethods()) {
             Endpoint annotation = method.getAnnotation(Endpoint.class);
             if (annotation == null) {
@@ -100,6 +103,19 @@ public final class Endpoints {
             HandlerType type = annotation.type();
             String path = annotation.path();
             javalin.addHandler(type, path, (ctx) -> method.invoke(obj, ctx));
+            endpointsRegistered++;
+        }
+
+        /*
+         * If no endpoints were registered as a result of calling this
+         * method, this was like a mistake by the user. As such, throw
+         * an exception to notify them something has gone wrong.
+         */
+        if (endpointsRegistered <= 0) {
+            String msg = "obj contained no valid";
+            msg += " @" + Endpoint.class.getSimpleName();
+            msg += " annotated methods to register";
+            throw new IllegalArgumentException(msg);
         }
     }
 
