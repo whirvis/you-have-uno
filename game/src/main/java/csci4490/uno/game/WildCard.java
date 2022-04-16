@@ -2,20 +2,19 @@ package csci4490.uno.game;
 
 class WildCard extends Card{
 	
-	public WildCard(String value)
+	public WildCard()
 	{
-		super();
-		this.value = value;
+		this.value = "WILD";
 		setScoreValue(50);
 	}
 	@Override
 	public Boolean matchCard(Card card) {
 		
-		if (card.getColor().equals(this.getColor()))
-		{
+		//if (card.getColor().equals(this.getColor()))
+		//{
 			return true;
-		}
-		return false;
+		//}
+		//return false;
 	}
 	
 	public void setColor(String color)

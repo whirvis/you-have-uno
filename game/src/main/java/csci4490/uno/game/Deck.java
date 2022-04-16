@@ -5,8 +5,8 @@ import java.util.Collections;
 
 public class Deck 
 {
-	final private ArrayList<Card> playDeck;
-	final private ArrayList<Card> discards;
+	private ArrayList<Card> playDeck;
+	private ArrayList<Card> discards;
 	ArrayList<Hand> hands;
 	int numHands;
 
@@ -32,7 +32,7 @@ public class Deck
 		final String eight = "8";
 		final String nine = "9";
 		playDeck = new ArrayList<Card>();
-		discards = null;
+		discards = new ArrayList<Card>();
 		
 		hands = new ArrayList<Hand>();
 		this.numHands = numHands;
@@ -50,8 +50,8 @@ public class Deck
 		
 		for (int i = 0; i < 4; i++)
 		{
-			playDeck.add(new Draw4Card(wild));
-			playDeck.add(new WildCard(wild));
+			playDeck.add(new Draw4Card());
+			playDeck.add(new WildCard());
 		}
 		for (int i = 0; i < 2; i++)
 		{
@@ -112,7 +112,7 @@ public class Deck
 
 		}
 		
-		shuffle();
+		Collections.shuffle(playDeck);
 		
 	}
 	
@@ -133,6 +133,7 @@ public class Deck
 	{
 		
 		discards.add(c);
+		playDeck.remove((Object)c);
 		
 		
 	}
@@ -147,7 +148,7 @@ public class Deck
 	
 	public Boolean isEmpty()
 	{
-		if (playDeck.isEmpty())
+		if (playDeck.size() == 0)
 		{
 			return true;
 		}
@@ -160,10 +161,12 @@ public class Deck
 	
 	public void shuffle()
 	{
-		//playDeck = discards;
-		//discards = null;
+		playDeck = discards;
+		discards = new ArrayList<Card>();
 		Collections.shuffle(playDeck);
 	}
+	
+	
 	
 	public ArrayList<Hand> getHands()
 	{

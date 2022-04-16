@@ -2,8 +2,8 @@ package csci4490.uno.game;
 
 public class Draw4Card extends WildCard {
 	
-	public Draw4Card(String value) {
-		super(value);
+	public Draw4Card() {
+		super();
 		
 	}
 
