@@ -1,9 +1,9 @@
 package csci4490.uno.dealer.account;
 
+import csci4490.uno.dealer.SaltGenerator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.security.SecureRandom;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,34 +16,6 @@ import java.util.UUID;
  * used to create accounts, verify logins, etc.
  */
 public class AccountManager {
-
-    /* @formatter:off */
-    private static final char[] SALT_ALPHABET = new char[] {
-            '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-            'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
-            'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
-            'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D',
-            'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
-            'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X',
-            'Y', 'Z', '!', '@', '#', '$', '%', '^', '&', '*',
-            '(', ')', '~', '`', '+', '-', '=', '_', '{', '[',
-            '}', ']', '|', '\\', ':', ';', '\"', '\'', '<',
-            ',', '>', '.', '?', '/'
-    };
-    /* @formatter:on */
-
-    @SuppressWarnings("SameParameterValue")
-    private static @NotNull String generateSalt(int length) {
-        SecureRandom random = new SecureRandom();
-        StringBuilder salt = new StringBuilder();
-
-        for (int i = 0; i < length; i++) {
-            int index = random.nextInt(SALT_ALPHABET.length);
-            salt.append(SALT_ALPHABET[index]);
-        }
-
-        return salt.toString();
-    }
 
     private final Connection db;
     private final WebAccountManager webManager;
@@ -169,7 +141,7 @@ public class AccountManager {
         }
 
         UUID uuid = this.findAvailableId();
-        String salt = generateSalt(32);
+        String salt = SaltGenerator.generateSalt(32);
 
         String sql = "INSERT INTO account VALUES(?, ?, MD5(?), ?)";
         try (PreparedStatement stmt = db.prepareStatement(sql)) {
