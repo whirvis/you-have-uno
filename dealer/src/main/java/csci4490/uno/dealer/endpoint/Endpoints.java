@@ -3,6 +3,7 @@ package csci4490.uno.dealer.endpoint;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 import io.javalin.http.HandlerType;
+import io.javalin.http.InternalServerErrorResponse;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -10,6 +11,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Parameter;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -159,6 +162,25 @@ public final class Endpoints {
             msg += " @" + Endpoint.class.getSimpleName();
             msg += " annotated methods to register";
             throw new IllegalArgumentException(msg);
+        }
+    }
+
+    /**
+     * Gets the address of a context via {@link Context#ip()} and converts
+     * it to an {@link InetAddress} instance. If an error occurs during
+     * conversion, this method throws an {@code InternalServerErrorResponse}.
+     *
+     * @param ctx the context whose address to get.
+     * @return the address of the context.
+     * @throws NullPointerException if {@code ctx} is {@code null}.
+     */
+    public static InetAddress getAddress(@NotNull Context ctx) {
+        Objects.requireNonNull(ctx, "ctx cannot be null");
+        try {
+            return InetAddress.getByName(ctx.ip());
+        } catch (UnknownHostException e) {
+            String msg = e.getMessage();
+            throw new InternalServerErrorResponse(msg);
         }
     }
 
