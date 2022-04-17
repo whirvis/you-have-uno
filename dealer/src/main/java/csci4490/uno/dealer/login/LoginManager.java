@@ -39,7 +39,7 @@ public class LoginManager {
         this.webManager = new WebLoginManager(this);
     }
 
-    public WebLoginManager getWebManager() {
+    public @NotNull WebLoginManager getWebManager() {
         return this.webManager;
     }
 
