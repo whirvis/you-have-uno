@@ -46,6 +46,14 @@ public abstract class EndpointParameter<T> {
         this(key, null);
     }
 
+    public final @NotNull String getKey() {
+        return this.key;
+    }
+
+    public final boolean hasValidator() {
+        return this.validator != null;
+    }
+
     /**
      * Decodes the arguments for the parameter and returns them. While
      * multiple arguments <i>can</i> be specified for a single parameter,
@@ -64,11 +72,36 @@ public abstract class EndpointParameter<T> {
     protected abstract T decode(@NotNull Context ctx,
                                 @NotNull List<String> values);
 
-    private T validate(@NotNull Context ctx, @NotNull List<String> values) {
-        if (validator != null) {
+    private T validate(@NotNull Context ctx, @NotNull List<String> values,
+                       boolean skipValidation) {
+        if (validator != null && !skipValidation) {
             validator.validate(ctx, values);
         }
         return this.decode(ctx, values);
+    }
+
+    /**
+     * Searches for the parameter in the specified request. If it is not
+     * present, the specified fallback value is returned.
+     *
+     * @param ctx            the context of the request.
+     * @param skipValidation {@code true} to skip validation for the
+     *                       parameter argument, {@code false} otherwise.
+     * @return the argument for the parameter, {@code fallback} if it is not
+     * present in the request.
+     * @throws NullPointerException if {@code ctx} is {@code null}.
+     */
+    public final T get(@NotNull Context ctx, @Nullable T fallback,
+                       boolean skipValidation) {
+        Objects.requireNonNull(ctx, "ctx cannot be null");
+
+        Map<String, List<String>> params = ctx.queryParamMap();
+        if (!params.containsKey(key)) {
+            return fallback;
+        }
+
+        List<String> values = params.get(key);
+        return this.validate(ctx, values, skipValidation);
     }
 
     /**
@@ -81,26 +114,20 @@ public abstract class EndpointParameter<T> {
      * @throws NullPointerException if {@code ctx} is {@code null}.
      */
     public final T get(@NotNull Context ctx, @Nullable T fallback) {
-        Objects.requireNonNull(ctx, "ctx cannot be null");
-
-        Map<String, List<String>> params = ctx.queryParamMap();
-        if (!params.containsKey(key)) {
-            return fallback;
-        }
-
-        List<String> values = params.get(key);
-        return this.validate(ctx, values);
+        return this.get(ctx, fallback, false);
     }
 
     /**
      * Requires that the parameter be present in the specified request.
      *
-     * @param ctx the context of the request.
+     * @param ctx            the context of the request.
+     * @param skipValidation {@code true} to skip validation for the
+     *                       parameter argument, {@code false} otherwise.
      * @return the argument for the parameter.
      * @throws NullPointerException  if {@code ctx} is {@code null}.
      * @throws HttpResponseException if the parameter is not present.
      */
-    public final T require(@NotNull Context ctx) {
+    public final T require(@NotNull Context ctx, boolean skipValidation) {
         Objects.requireNonNull(ctx, "ctx cannot be null");
 
         Map<String, List<String>> params = ctx.queryParamMap();
@@ -112,7 +139,20 @@ public abstract class EndpointParameter<T> {
         }
 
         List<String> values = params.get(key);
-        return this.validate(ctx, values);
+        return this.validate(ctx, values, skipValidation);
+    }
+
+
+    /**
+     * Requires that the parameter be present in the specified request.
+     *
+     * @param ctx the context of the request.
+     * @return the argument for the parameter.
+     * @throws NullPointerException  if {@code ctx} is {@code null}.
+     * @throws HttpResponseException if the parameter is not present.
+     */
+    public final T require(@NotNull Context ctx) {
+        return this.require(ctx, false);
     }
 
 }
