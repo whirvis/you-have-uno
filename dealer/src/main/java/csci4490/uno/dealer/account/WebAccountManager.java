@@ -26,7 +26,7 @@ public class WebAccountManager {
     /* @formatter:off */
     private static final StringParameter
             USERNAME_PARAM = new StringParameter("username",
-            WebAccountManager::validateUsername),
+                    WebAccountManager::validateUsername),
             PASSWORD_PARAM = new StringParameter("password",
                     WebAccountManager::validatePassword);
 
