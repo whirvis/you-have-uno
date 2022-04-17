@@ -65,9 +65,10 @@ public class AccountManager {
     public boolean usernameExists(@NotNull String username) throws SQLException {
         Objects.requireNonNull(username, "username cannot be null");
 
-        String sql = "SELECT username FROM account WHERE username = ?";
+        String sql = "SELECT username FROM account";
+        sql += " WHERE lower(username) = ?";
         try (PreparedStatement stmt = db.prepareStatement(sql)) {
-            stmt.setString(1, username);
+            stmt.setString(1, username.toLowerCase());
             return stmt.executeQuery().next();
         }
     }
