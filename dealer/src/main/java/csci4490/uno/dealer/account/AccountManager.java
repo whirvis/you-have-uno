@@ -85,22 +85,6 @@ public class AccountManager {
     }
 
     /**
-     * @param uuid the UUID to check for.
-     * @return {@code true} if an account with the specified UUID exists,
-     * {@code false} otherwise.
-     * @throws SQLException if an SQL error occurs.
-     */
-    public boolean uuidExists(@NotNull UUID uuid) throws SQLException {
-        Objects.requireNonNull(uuid, "uuid cannot be null");
-
-        String sql = "SELECT uuid FROM account WHERE uuid = ?";
-        try (PreparedStatement stmt = db.prepareStatement(sql)) {
-            stmt.setString(1, uuid.toString());
-            return stmt.executeQuery().next();
-        }
-    }
-
-    /**
      * @param username the username to check for.
      * @return {@code true} if an account with the specified username exists,
      * {@code false} otherwise.
@@ -262,37 +246,5 @@ public class AccountManager {
         }
     }
     /* @formatter:on */
-
-    /**
-     * This is a shorthand for {@link #verifyLogin(UUID, String)}. If no
-     * account with the specified username exists, this method will simply
-     * return {@code false} (rather than throwing an exception).
-     *
-     * @param username the username of the account.
-     * @param password the password to verify. For security reasons,
-     *                 this should be discarded from memory as quickly
-     *                 as possible. This can be done by assigning the
-     *                 password {@code String} to a value of {@code null}.
-     * @return {@code true} if login was successful, {@code false} otherwise.
-     * @throws NullPointerException if {@code username} or {@code password}
-     *                              are {@code null}.
-     * @throws SQLException         if an SQL error occurs.
-     */
-    public boolean verifyLogin(@NotNull String username,
-                               @NotNull String password) throws SQLException {
-        Objects.requireNonNull(username, "username cannot be null");
-        Objects.requireNonNull(password, "password cannot be null");
-
-        /*
-         * This works by getting the UUID of an account by its username.
-         * If the UUID is null, that means no such account exists. In this
-         * situation, just return false for a failed login.
-         */
-        UUID uuid = this.getUUID(username);
-        if (uuid == null) {
-            return false; /* no such account */
-        }
-        return this.verifyLogin(uuid, password);
-    }
 
 }
