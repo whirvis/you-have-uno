@@ -102,7 +102,8 @@ public class WebAccountManager {
 
         if (manager.usernameExists(username)) {
             ctx.status(HttpCode.CONFLICT);
-            return; /* account already exists */
+            ctx.result("Account with username already exists");
+            return;
         }
 
         UnoAccount account = manager.createAccount(username, password);
