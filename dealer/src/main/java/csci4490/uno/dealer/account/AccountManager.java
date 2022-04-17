@@ -1,6 +1,7 @@
 package csci4490.uno.dealer.account;
 
 import csci4490.uno.dealer.SaltGenerator;
+import csci4490.uno.dealer.UnoDealer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -11,10 +12,6 @@ import java.sql.SQLException;
 import java.util.Objects;
 import java.util.UUID;
 
-/**
- * The account manager for the <i>You Have Uno!</i> database. This can be
- * used to create accounts, verify logins, etc.
- */
 public class AccountManager {
 
     private final Connection db;
@@ -23,6 +20,7 @@ public class AccountManager {
     /**
      * @param db the database connection.
      * @throws NullPointerException if {@code db} is {@code null}.
+     * @see #getWebManager()
      */
     public AccountManager(@NotNull Connection db) {
         this.db = Objects.requireNonNull(db, "db cannot be null");
@@ -201,22 +199,9 @@ public class AccountManager {
             throw new SQLException("missing salt, this is a bug");
         }
 
-        /*
-         * Here we are using MySQL to compute the hash. This requires
-         * another query, but it ensures that it is computed correctly.
-         */
-        String md5 = "SELECT MD5(?)";
-        try (PreparedStatement stmt = db.prepareStatement(md5)) {
-            stmt.setString(1, password + passwordSalt);
-
-            ResultSet query = stmt.executeQuery();
-            if (!query.next()) {
-                throw new SQLException("failure to compute MD5");
-            }
-
-            String computedHash = query.getString(1);
-            return computedHash.equals(passwordHash);
-        }
+        String saltedPassword = password + passwordSalt;
+        String calculatedHash = UnoDealer.getMD5(db, saltedPassword);
+        return calculatedHash.equals(passwordHash);
     }
     /* @formatter:on */
 
