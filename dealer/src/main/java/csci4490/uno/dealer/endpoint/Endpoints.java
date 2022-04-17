@@ -3,16 +3,20 @@ package csci4490.uno.dealer.endpoint;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 import io.javalin.http.HandlerType;
+import io.javalin.http.HttpCode;
 import io.javalin.http.InternalServerErrorResponse;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Parameter;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -182,6 +186,33 @@ public final class Endpoints {
             String msg = e.getMessage();
             throw new InternalServerErrorResponse(msg);
         }
+    }
+
+    /**
+     * Sets the exception handler for a Javalin webserver. This maps to
+     * {@code Exception.class}, meaning all exceptions will be handled.
+     * When an exception is thrown, the handler will set the result to
+     * the stacktrace and set the status code to
+     * {@link HttpCode#INTERNAL_SERVER_ERROR}.
+     *
+     * @param javalin the webserver whose exceptions to handle.
+     * @throws NullPointerException if {@code javalin} is {@code null}.
+     */
+    public static void handleExceptions(@NotNull Javalin javalin) {
+        Objects.requireNonNull(javalin, "javalin cannot be null");
+        javalin.exception(Exception.class, (cause, ctx) -> {
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+            PrintStream outStream = new PrintStream(out);
+            cause.printStackTrace(outStream);
+            outStream.close();
+
+            Charset charset = Charset.defaultCharset();
+            String message = out.toString(charset);
+            ctx.result(message);
+
+            ctx.status(HttpCode.INTERNAL_SERVER_ERROR);
+        });
     }
 
 }
