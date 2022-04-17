@@ -22,3 +22,6 @@ doc
 
 # IntelliJ IDEA
 .idea/
+
+# You Have Uno!
+**/config/
