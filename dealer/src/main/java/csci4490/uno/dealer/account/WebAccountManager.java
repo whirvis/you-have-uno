@@ -77,7 +77,7 @@ public class WebAccountManager {
          * leaves in trailing whitespace.
          */
         String trimmed = password.trim();
-        if (password.equals(trimmed)) {
+        if (!password.equals(trimmed)) {
             String msg = "Password cannot be surrounded by whitespace";
             throw new BadRequestResponse(msg);
         }
