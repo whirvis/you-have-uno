@@ -1,6 +1,6 @@
 dependencies {
-    implementation 'org.springframework:spring-jdbc:5.3.18'
-    implementation 'io.javalin:javalin:4.4.0'
-
     implementation files('lib/mysql-connector-java-8.0.28.jar')
+    implementation 'io.javalin:javalin:4.4.0'
+    implementation 'org.slf4j:slf4j-simple:1.8.0-beta4'
+    implementation 'com.google.code.gson:gson:2.9.0'
 }
