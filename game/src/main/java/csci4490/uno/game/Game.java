@@ -9,7 +9,7 @@ public class Game
 	private int gameCode;
 	private int numberOfGames;
 	
-	public Game(int numPlayers)
+	public Game(int numPlayers, int num_games)
 	{
 		
 	}

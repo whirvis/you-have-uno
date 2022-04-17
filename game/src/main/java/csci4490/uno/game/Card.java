@@ -40,6 +40,8 @@ abstract class Card {
 	{
 		return color + ", " + value + " ," + applyCardEffect();
 	}
+
+	protected abstract void setColor(String color);
 	
 	
 

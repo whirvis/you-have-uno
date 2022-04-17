@@ -16,7 +16,7 @@ class WildCard extends Card{
 		//}
 		//return false;
 	}
-	
+	@Override 
 	public void setColor(String color)
 	{
 		this.color = color;
@@ -26,5 +26,5 @@ class WildCard extends Card{
 		// TODO Auto-generated method stub
 		return "WILD";
 	}
-
+	
 }

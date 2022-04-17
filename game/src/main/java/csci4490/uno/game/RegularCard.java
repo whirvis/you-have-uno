@@ -27,5 +27,11 @@ public class RegularCard extends Card{
 		return "NONE";
 	}
 
+	@Override
+	protected void setColor(String color) {
+		// TODO Auto-generated method stub
+		
+	}
+
 
 }

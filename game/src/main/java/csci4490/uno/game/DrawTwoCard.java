@@ -13,4 +13,10 @@ public class DrawTwoCard extends SpecialCard {
 		return drawTwo;
 	}
 
+	@Override
+	protected void setColor(String color) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

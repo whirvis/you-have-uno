@@ -14,4 +14,10 @@ public class ReverseCard extends SpecialCard {
 		return reverse;
 	}
 
+	@Override
+	protected void setColor(String color) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

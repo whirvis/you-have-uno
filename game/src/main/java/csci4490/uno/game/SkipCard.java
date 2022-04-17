@@ -15,4 +15,10 @@ public class SkipCard extends SpecialCard {
 		return skip;
 	}
 
+	@Override
+	protected void setColor(String color) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
