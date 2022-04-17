@@ -18,7 +18,29 @@ import java.util.Objects;
  */
 public abstract class Config {
 
+    private final String name;
     private boolean loaded;
+
+    /**
+     * @param name the config name. This is not indicative of where this
+     *             config resides. It exists for the user to know which
+     *             configuration is being referred to.
+     * @throws NullPointerException if {@code name} is {@code null}.
+     */
+    public Config(@NotNull String name) {
+        this.name = Objects.requireNonNull(name, "name cannot be null");
+    }
+
+    /**
+     * The name of this configuration is <i>not</i> indicative of where it
+     * was loaded. It exists only for the user to know which configuration
+     * is being referred to.
+     *
+     * @return the name of this config.
+     */
+    public @NotNull String getName() {
+        return this.name;
+    }
 
     private void requireLoaded() {
         if (!loaded) {
@@ -154,7 +176,7 @@ public abstract class Config {
         if (!this.hasProperty(key)) {
             String msg = "missing required config";
             msg += " \"" + key + "\"";
-            throw new IllegalStateException(msg);
+            throw new ConfigException(msg);
         }
         return this.fetchProperty(key);
     }

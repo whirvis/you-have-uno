@@ -10,7 +10,8 @@ public class PropertiesConfig extends Config {
 
     private final Properties config;
 
-    public PropertiesConfig() {
+    public PropertiesConfig(@NotNull String name) {
+        super(name);
         this.config = new Properties();
     }
 
