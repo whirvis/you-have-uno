@@ -35,8 +35,8 @@ public class WebVisitManager {
         this.manager = manager;
     }
 
-    @Endpoint(type = HandlerType.POST, path = "/uno/visit")
-    public void visit(@NotNull Context ctx) throws SQLException {
+    @Endpoint(type = HandlerType.POST, path = "/uno/visit/begin")
+    public void begin(@NotNull Context ctx) throws SQLException {
         InetAddress address = Endpoints.getAddress(ctx);
         UUID uuid = UUID_PARAM.require(ctx);
         UUID accessToken = ACCESS_TOKEN_PARAM.require(ctx);
