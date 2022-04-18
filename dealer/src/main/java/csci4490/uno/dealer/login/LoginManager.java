@@ -88,11 +88,11 @@ public class LoginManager {
      * @param password the password being used for login.
      * @return the user login information, {@code null} if an incorrect
      * {@code uuid} and {@code password} combination was provided.
-     * @throws SQLException          if an SQL error occurs.
      * @throws NullPointerException  if {@code address}, {@code uuid},
      *                               or {@code password} are {@code null}.
      * @throws IllegalStateException if an account manager has not been
      *                               provided for this login manager.
+     * @throws SQLException          if an SQL error occurs.
      * @see #setAccountManager(AccountManager)
      */
     public @Nullable UnoLogin loginAccount(@NotNull InetAddress address,
@@ -135,16 +135,16 @@ public class LoginManager {
     /**
      * Verifies that an access token provided by a user from a certain IP
      * address is valid. This method should be used to authenticate users
-     * before performing certain tasks, like joining a game.
+     * before performing certain tasks, like beginning a visit.
      *
      * @param address     the IP address of the user.
      * @param uuid        the UUID of the user.
      * @param accessToken the provided access token.
      * @return {@code true} if a valid access token was provided by the user
      * from their IP address, {@code false} otherwise.
-     * @throws SQLException         if an SQL error occurs.
      * @throws NullPointerException if {@code address}, {@code uuid}, or
      *                              {@code accessToken} are {@code null}.
+     * @throws SQLException         if an SQL error occurs.
      */
     public boolean verifyAccess(@NotNull InetAddress address,
                                 @NotNull UUID uuid,

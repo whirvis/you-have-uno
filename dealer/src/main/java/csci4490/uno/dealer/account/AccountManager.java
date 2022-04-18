@@ -64,7 +64,7 @@ public class AccountManager {
         Objects.requireNonNull(username, "username cannot be null");
 
         String sql = "SELECT username FROM account";
-        sql += " WHERE lower(username) = ?";
+        sql += " WHERE LOWER(username) = ?";
         try (PreparedStatement stmt = db.prepareStatement(sql)) {
             stmt.setString(1, username.toLowerCase());
             return stmt.executeQuery().next();
