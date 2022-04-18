@@ -2,7 +2,7 @@ package csci4490.uno.dealer.manager;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import csci4490.uno.dealer.UnoDealer;
+import csci4490.uno.commons.UnoJson;
 import csci4490.uno.dealer.endpoint.Endpoint;
 import csci4490.uno.dealer.endpoint.ParameterType;
 import csci4490.uno.dealer.endpoint.StringParameter;
@@ -109,7 +109,7 @@ public class WebAccountManager {
         }
 
         UnoAccount account = manager.createAccount(username, password);
-        JsonElement accountJson = UnoDealer.toJson(account);
+        JsonElement accountJson = UnoJson.toJson(account);
 
         JsonObject response = new JsonObject();
         response.add("account", accountJson);
@@ -139,7 +139,7 @@ public class WebAccountManager {
         UUID uuid = UUID_PARAM.require(ctx, ParameterType.QUERY);
 
         UnoAccount account = manager.getAccount(uuid);
-        JsonElement accountJson = UnoDealer.toJson(account);
+        JsonElement accountJson = UnoJson.toJson(account);
 
         JsonObject response = new JsonObject();
         response.add("account", accountJson);

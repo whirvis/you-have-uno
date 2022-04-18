@@ -1,4 +1,4 @@
-package csci4490.uno.dealer.scheduler;
+package csci4490.uno.commons.scheduler;
 
 import org.jetbrains.annotations.MustBeInvokedByOverriders;
 import org.jetbrains.annotations.NotNull;

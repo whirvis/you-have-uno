@@ -1,4 +1,4 @@
-package csci4490.uno.dealer;
+package csci4490.uno.commons;
 
 import org.jetbrains.annotations.NotNull;
 

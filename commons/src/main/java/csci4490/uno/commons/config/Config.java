@@ -1,4 +1,4 @@
-package csci4490.uno.dealer.config;
+package csci4490.uno.commons.config;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

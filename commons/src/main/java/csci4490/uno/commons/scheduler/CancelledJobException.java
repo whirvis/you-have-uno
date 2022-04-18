@@ -1,4 +1,4 @@
-package csci4490.uno.dealer.scheduler;
+package csci4490.uno.commons.scheduler;
 
 /**
  * Signals that a job has been cancelled during execution.

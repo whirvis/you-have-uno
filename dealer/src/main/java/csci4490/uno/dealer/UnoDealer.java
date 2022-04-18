@@ -1,17 +1,15 @@
 package csci4490.uno.dealer;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
-import csci4490.uno.dealer.config.Config;
-import csci4490.uno.dealer.config.ConfigException;
-import csci4490.uno.dealer.config.PropertiesConfig;
+import csci4490.uno.commons.UnoJson;
+import csci4490.uno.commons.config.Config;
+import csci4490.uno.commons.config.ConfigException;
+import csci4490.uno.commons.config.PropertiesConfig;
+import csci4490.uno.commons.scheduler.Scheduler;
+import csci4490.uno.commons.scheduler.ThreadedScheduler;
 import csci4490.uno.dealer.endpoint.Endpoints;
 import csci4490.uno.dealer.manager.AccountManager;
 import csci4490.uno.dealer.manager.LoginManager;
 import csci4490.uno.dealer.manager.VisitManager;
-import csci4490.uno.dealer.scheduler.Scheduler;
-import csci4490.uno.dealer.scheduler.ThreadedScheduler;
 import io.javalin.Javalin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -27,18 +25,6 @@ import java.util.Objects;
 public class UnoDealer {
 
     private static final int WEBSERVER_PORT = 48902;
-    private static final Gson GSON =
-            new GsonBuilder().serializeNulls().create();
-
-    /**
-     * Converts an {@code Object} to JSON.
-     *
-     * @param src the object to convert.
-     * @return {@code src} converted to JSON.
-     */
-    public static JsonElement toJson(@Nullable Object src) {
-        return GSON.toJsonTree(src);
-    }
 
     /**
      * Hashes a string with MD5 via MySQL.
@@ -110,7 +96,7 @@ public class UnoDealer {
     private void startWebServer() {
         Javalin webserver = Javalin.create(config -> {
             config.showJavalinBanner = false;
-            config.jsonMapper(new GsonMapper(GSON));
+            config.jsonMapper(new GsonMapper(UnoJson.GSON));
         });
 
         Endpoints.handleExceptions(webserver);

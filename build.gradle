@@ -19,6 +19,17 @@ subprojects {
     dependencies {
         compileOnly 'org.jetbrains:annotations:22.0.0'
 
+        implementation 'com.google.code.gson:gson:2.9.0'
+
+        /*
+         * All module, except for commons itself, should be using the
+         * "commons" module. This check is performed to ensure that a
+         * circular dependency does not occur.
+         */
+        if (project.name != "commons") {
+            implementation project(':commons')
+        }
+
         testCompileOnly 'org.jetbrains:annotations:22.0.0'
         testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
         testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.8.2'

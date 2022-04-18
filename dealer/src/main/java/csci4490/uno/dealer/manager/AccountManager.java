@@ -1,6 +1,6 @@
 package csci4490.uno.dealer.manager;
 
-import csci4490.uno.dealer.SaltGenerator;
+import csci4490.uno.commons.SaltGenerator;
 import csci4490.uno.dealer.UnoDealer;
 import csci4490.uno.web.UnoAccount;
 import org.jetbrains.annotations.NotNull;

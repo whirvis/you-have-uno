@@ -1,8 +1,8 @@
 package csci4490.uno.dealer.manager;
 
-import csci4490.uno.dealer.scheduler.JobRunnable;
-import csci4490.uno.dealer.scheduler.ScheduledJob;
-import csci4490.uno.dealer.scheduler.Scheduler;
+import csci4490.uno.commons.scheduler.JobRunnable;
+import csci4490.uno.commons.scheduler.ScheduledJob;
+import csci4490.uno.commons.scheduler.Scheduler;
 import csci4490.uno.web.UnoVisit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
