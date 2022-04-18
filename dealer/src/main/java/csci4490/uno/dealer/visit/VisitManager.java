@@ -64,6 +64,17 @@ public class VisitManager {
         }
     }
 
+    private void invalidateSession(@NotNull InetAddress address,
+                                   @NotNull UUID uuid) throws SQLException {
+        String sql = "DELETE FROM visit WHERE";
+        sql += " ip_address = INET6_ATON(?) AND uuid = ?";
+        try (PreparedStatement stmt = db.prepareStatement(sql)) {
+            stmt.setString(1, address.getHostAddress());
+            stmt.setString(2, uuid.toString());
+            stmt.execute();
+        }
+    }
+
     /**
      * Schedules a job which removes inactive visitors from the {@code visit}
      * table at the interval specified by {@link #VISIT_TIMEOUT}.
@@ -88,6 +99,9 @@ public class VisitManager {
      * token can only be used from the IP address that requested it.
      * Furthermore, the user must send a keep alive request to at an interval
      * specified by {@link #VISIT_TIMEOUT} to keep their session valid.
+     * <p>
+     * <b>Note:</b> If a user begins a visit from the same IP address,
+     * the previous session token they were assigned is invalidated.
      *
      * @param address     the IP address of the user.
      * @param uuid        the UUID of the user.
@@ -112,6 +126,13 @@ public class VisitManager {
         if (!loginManager.verifyAccess(address, uuid, accessToken)) {
             return null; /* invalid access token */
         }
+
+        /*
+         * For both security and storage reasons, a user cannot have
+         * multiple session tokens on the same IP address. Invalidate
+         * the previous access token (if any) for the user.
+         */
+        this.invalidateSession(address, uuid);
 
         long currentTime = System.currentTimeMillis();
         UUID sessionToken = UUID.randomUUID();
