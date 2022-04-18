@@ -98,9 +98,7 @@ public class UnoDealer {
         visitManager.setLoginManager(loginManager);
     }
 
-    private static @NotNull Server createSSLServer() {
-        Server server = new Server();
-
+    private static @NotNull SslContextFactory getSSLContext() {
         File unoDealerJks = new File(CONFIG_DIR, "uno_dealer.jks");
         if (!unoDealerJks.exists()) {
             String msg = "missing required keystore file";
@@ -108,11 +106,22 @@ public class UnoDealer {
             throw new ConfigException(msg);
         }
 
-        SslContextFactory context = new SslContextFactory.Server();
-        context.setKeyStorePath(unoDealerJks.getPath());
-        context.setKeyStorePassword("you_have_uno");
+        SslContextFactory sslContext = new SslContextFactory.Server();
+        sslContext.setKeyStorePath(unoDealerJks.getPath());
+        sslContext.setKeyStorePassword("you_have_uno");
+        return sslContext;
+    }
 
-        ServerConnector connector = new ServerConnector(server, context);
+    private static @NotNull Server createServer() {
+        Server server = new Server();
+
+        SslContextFactory sslContext = null;
+        String disableJks = System.getProperty("disable_jks", "false");
+        if (!Boolean.parseBoolean(disableJks)) {
+            sslContext = getSSLContext();
+        }
+
+        ServerConnector connector = new ServerConnector(server, sslContext);
         connector.setPort(WEBSERVER_PORT);
 
         Connector[] connectors = new Connector[1];
@@ -126,7 +135,7 @@ public class UnoDealer {
         Javalin webserver = Javalin.create(config -> {
             config.showJavalinBanner = false;
             config.jsonMapper(new GsonMapper(UnoJson.GSON));
-            config.server(UnoDealer::createSSLServer);
+            config.server(UnoDealer::createServer);
         });
 
         Endpoints.handleExceptions(webserver);
