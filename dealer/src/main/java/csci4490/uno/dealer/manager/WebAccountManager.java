@@ -1,4 +1,4 @@
-package csci4490.uno.dealer.account;
+package csci4490.uno.dealer.manager;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -6,6 +6,7 @@ import csci4490.uno.dealer.UnoDealer;
 import csci4490.uno.dealer.endpoint.Endpoint;
 import csci4490.uno.dealer.endpoint.StringParameter;
 import csci4490.uno.dealer.endpoint.UUIDParameter;
+import csci4490.uno.web.UnoAccount;
 import io.javalin.http.BadRequestResponse;
 import io.javalin.http.Context;
 import io.javalin.http.HandlerType;

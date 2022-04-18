@@ -1,10 +1,11 @@
-package csci4490.uno.dealer.login;
+package csci4490.uno.dealer.manager;
 
 import com.google.gson.JsonObject;
 import csci4490.uno.dealer.endpoint.Endpoint;
 import csci4490.uno.dealer.endpoint.Endpoints;
 import csci4490.uno.dealer.endpoint.StringParameter;
 import csci4490.uno.dealer.endpoint.UUIDParameter;
+import csci4490.uno.web.UnoLogin;
 import io.javalin.http.Context;
 import io.javalin.http.HandlerType;
 import io.javalin.http.HttpCode;

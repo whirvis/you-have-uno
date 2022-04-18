@@ -1,7 +1,8 @@
-package csci4490.uno.dealer.account;
+package csci4490.uno.dealer.manager;
 
 import csci4490.uno.dealer.SaltGenerator;
 import csci4490.uno.dealer.UnoDealer;
+import csci4490.uno.web.UnoAccount;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -114,7 +115,7 @@ public class AccountManager {
             }
 
             String username = query.getString("username");
-            return new DbUnoAccount(uuid, username);
+            return new UnoAccount(uuid, username);
         }
     }
 
@@ -151,7 +152,7 @@ public class AccountManager {
             stmt.execute();
         }
 
-        return new DbUnoAccount(uuid, username);
+        return new UnoAccount(uuid, username);
     }
     /* @formatter:on */
 

@@ -1,9 +1,9 @@
-package csci4490.uno.dealer.visit;
+package csci4490.uno.dealer.manager;
 
-import csci4490.uno.dealer.login.LoginManager;
 import csci4490.uno.dealer.scheduler.JobRunnable;
 import csci4490.uno.dealer.scheduler.ScheduledJob;
 import csci4490.uno.dealer.scheduler.Scheduler;
+import csci4490.uno.web.UnoVisit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -146,7 +146,7 @@ public class VisitManager {
             stmt.execute();
         }
 
-        return new DbUnoVisit(address, sessionToken, currentTime);
+        return new UnoVisit(address, sessionToken, currentTime);
     }
     /* @formatter:on */
 

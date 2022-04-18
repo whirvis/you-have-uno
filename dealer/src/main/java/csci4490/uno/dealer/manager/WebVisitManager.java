@@ -1,4 +1,4 @@
-package csci4490.uno.dealer.visit;
+package csci4490.uno.dealer.manager;
 
 import csci4490.uno.dealer.endpoint.Endpoint;
 import csci4490.uno.dealer.endpoint.Endpoints;
