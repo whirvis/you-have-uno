@@ -11,9 +11,13 @@ import csci4490.uno.dealer.manager.AccountManager;
 import csci4490.uno.dealer.manager.LoginManager;
 import csci4490.uno.dealer.manager.VisitManager;
 import io.javalin.Javalin;
+import org.eclipse.jetty.server.Connector;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.ServerConnector;
+import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -24,6 +28,7 @@ import java.util.Objects;
 
 public class UnoDealer {
 
+    private static final File CONFIG_DIR = new File("./dealer/config");
     private static final int WEBSERVER_PORT = 48902;
 
     /**
@@ -69,7 +74,7 @@ public class UnoDealer {
 
     private void connectDb() throws IOException, SQLException {
         Config dbConfig = new PropertiesConfig("Database Config");
-        dbConfig.loadFile("./dealer/config/db.properties");
+        dbConfig.loadFile(new File(CONFIG_DIR, "db.properties"));
 
         String url = dbConfig.getProperty("url");
         String user = dbConfig.getProperty("user");
@@ -93,10 +98,35 @@ public class UnoDealer {
         visitManager.setLoginManager(loginManager);
     }
 
+    private static @NotNull Server createSSLServer() {
+        Server server = new Server();
+
+        File unoDealerJks = new File(CONFIG_DIR, "uno_dealer.jks");
+        if (!unoDealerJks.exists()) {
+            String msg = "missing required keystore file";
+            msg += " " + unoDealerJks.getPath();
+            throw new ConfigException(msg);
+        }
+
+        SslContextFactory context = new SslContextFactory.Server();
+        context.setKeyStorePath(unoDealerJks.getPath());
+        context.setKeyStorePassword("you_have_uno");
+
+        ServerConnector connector = new ServerConnector(server, context);
+        connector.setPort(WEBSERVER_PORT);
+
+        Connector[] connectors = new Connector[1];
+        connectors[0] = connector;
+        server.setConnectors(connectors);
+
+        return server;
+    }
+
     private void startWebServer() {
         Javalin webserver = Javalin.create(config -> {
             config.showJavalinBanner = false;
             config.jsonMapper(new GsonMapper(UnoJson.GSON));
+            config.server(UnoDealer::createSSLServer);
         });
 
         Endpoints.handleExceptions(webserver);
@@ -107,7 +137,7 @@ public class UnoDealer {
 
         visitManager.removeInactiveVisits(scheduler);
 
-        webserver.start(WEBSERVER_PORT);
+        webserver.start();
     }
 
     private void start() throws Exception {
