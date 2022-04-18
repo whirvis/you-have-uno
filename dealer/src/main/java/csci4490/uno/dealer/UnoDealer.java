@@ -11,6 +11,7 @@ import csci4490.uno.dealer.endpoint.Endpoints;
 import csci4490.uno.dealer.login.LoginManager;
 import csci4490.uno.dealer.scheduler.Scheduler;
 import csci4490.uno.dealer.scheduler.ThreadedScheduler;
+import csci4490.uno.dealer.visit.VisitManager;
 import io.javalin.Javalin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -73,6 +74,7 @@ public class UnoDealer {
     private Connection dbConnection;
     private AccountManager accountManager;
     private LoginManager loginManager;
+    private VisitManager visitManager;
     private boolean started;
 
     private UnoDealer() {
@@ -99,8 +101,10 @@ public class UnoDealer {
     private void createManagers() {
         this.accountManager = new AccountManager(dbConnection);
         this.loginManager = new LoginManager(dbConnection);
+        this.visitManager = new VisitManager(dbConnection);
 
         loginManager.setAccountManager(accountManager);
+        visitManager.setLoginManager(loginManager);
     }
 
     private void startWebServer() {
@@ -113,6 +117,9 @@ public class UnoDealer {
 
         Endpoints.register(webserver, accountManager.getWebManager());
         Endpoints.register(webserver, loginManager.getWebManager());
+        Endpoints.register(webserver, visitManager.getWebManager());
+
+        visitManager.removeInactiveVisits(scheduler);
 
         webserver.start(WEBSERVER_PORT);
     }
