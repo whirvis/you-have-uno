@@ -3,6 +3,7 @@ package csci4490.uno.dealer.manager;
 import com.google.gson.JsonObject;
 import csci4490.uno.dealer.endpoint.Endpoint;
 import csci4490.uno.dealer.endpoint.Endpoints;
+import csci4490.uno.dealer.endpoint.ParameterType;
 import csci4490.uno.dealer.endpoint.StringParameter;
 import csci4490.uno.dealer.endpoint.UUIDParameter;
 import csci4490.uno.web.UnoLogin;
@@ -39,8 +40,8 @@ public class WebLoginManager {
     @Endpoint(type = HandlerType.POST, path = "/uno/login")
     public void login(@NotNull Context ctx) throws SQLException {
         InetAddress address = Endpoints.getAddress(ctx);
-        UUID uuid = UUID_PARAM.require(ctx);
-        String password = PASSWORD_PARAM.require(ctx);
+        UUID uuid = UUID_PARAM.require(ctx, ParameterType.FORM);
+        String password = PASSWORD_PARAM.require(ctx, ParameterType.FORM);
 
         UnoLogin login = manager.loginAccount(address, uuid, password);
 
@@ -56,8 +57,8 @@ public class WebLoginManager {
     @Endpoint(type = HandlerType.POST, path = "/uno/login/verify")
     public void verify(@NotNull Context ctx) throws SQLException {
         InetAddress address = Endpoints.getAddress(ctx);
-        UUID uuid = UUID_PARAM.get(ctx, null);
-        UUID accessToken = ACCESS_TOKEN_PARAM.require(ctx);
+        UUID uuid = UUID_PARAM.require(ctx, ParameterType.FORM);
+        UUID accessToken = ACCESS_TOKEN_PARAM.require(ctx, ParameterType.FORM);
 
         boolean verified = manager.verifyAccess(address, uuid, accessToken);
 

@@ -22,8 +22,8 @@ public class UUIDParameter extends EndpointParameter<UUID> {
     }
 
     @Override
-    protected UUID decode(@NotNull Context ctx, @NotNull List<String> values) {
-        String str = values.get(0);
+    protected UUID decode(@NotNull Context ctx, @NotNull List<String> args) {
+        String str = args.get(0);
         try {
             return UUID.fromString(str);
         } catch (IllegalArgumentException e) {

@@ -36,8 +36,8 @@ public class StringParameter extends EndpointParameter<String> {
 
     @Override
     protected String decode(@NotNull Context ctx,
-                            @NotNull List<String> values) {
-        return values.get(0);
+                            @NotNull List<String> args) {
+        return args.get(0);
     }
 
 }

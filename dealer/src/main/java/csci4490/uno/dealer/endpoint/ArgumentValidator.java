@@ -14,9 +14,9 @@ import java.util.List;
 public interface ArgumentValidator {
 
     /**
-     * @param ctx    the context.
-     * @param values the arguments provided.
+     * @param ctx  the request context.
+     * @param args the arguments provided.
      */
-    void validate(@NotNull Context ctx, @NotNull List<String> values);
+    void validate(@NotNull Context ctx, @NotNull List<String> args);
 
 }

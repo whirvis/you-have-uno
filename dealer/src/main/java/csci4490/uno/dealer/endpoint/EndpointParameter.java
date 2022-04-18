@@ -7,7 +7,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -15,8 +14,8 @@ import java.util.Objects;
  * represent single parameters, but can contain multiple values.
  *
  * @param <T> the parameter value type.
- * @see #get(Context, Object)
- * @see #require(Context)
+ * @see #get(Context, ParameterType, Object)
+ * @see #require(Context, ParameterType)
  */
 public abstract class EndpointParameter<T> {
 
@@ -85,74 +84,85 @@ public abstract class EndpointParameter<T> {
      * present, the specified fallback value is returned.
      *
      * @param ctx            the context of the request.
+     * @param type           the parameter type.
      * @param skipValidation {@code true} to skip validation for the
      *                       parameter argument, {@code false} otherwise.
      * @return the argument for the parameter, {@code fallback} if it is not
      * present in the request.
-     * @throws NullPointerException if {@code ctx} is {@code null}.
+     * @throws NullPointerException if {@code ctx} or {@code type}
+     *                              are {@code null}.
      */
-    public final T get(@NotNull Context ctx, @Nullable T fallback,
-                       boolean skipValidation) {
+    public final T get(@NotNull Context ctx, @NotNull ParameterType type,
+                       @Nullable T fallback, boolean skipValidation) {
         Objects.requireNonNull(ctx, "ctx cannot be null");
+        Objects.requireNonNull(type, "type cannot be null");
 
-        Map<String, List<String>> params = ctx.queryParamMap();
-        if (!params.containsKey(key)) {
+        List<String> args = type.getArgs(key, ctx);
+        if (args.isEmpty()) {
             return fallback;
         }
 
-        List<String> values = params.get(key);
-        return this.validate(ctx, values, skipValidation);
+        return this.validate(ctx, args, skipValidation);
     }
 
     /**
      * Searches for the parameter in the specified request. If it is not
      * present, the specified fallback value is returned.
      *
-     * @param ctx the context of the request.
+     * @param ctx  the context of the request.
+     * @param type the parameter type.
      * @return the argument for the parameter, {@code fallback} if it is not
      * present in the request.
-     * @throws NullPointerException if {@code ctx} is {@code null}.
+     * @throws NullPointerException if {@code ctx} or {@code type}
+     *                              are {@code null}.
      */
-    public final T get(@NotNull Context ctx, @Nullable T fallback) {
-        return this.get(ctx, fallback, false);
+    public final T get(@NotNull Context ctx, @NotNull ParameterType type,
+                       @Nullable T fallback) {
+        return this.get(ctx, type, fallback, false);
     }
 
     /**
      * Requires that the parameter be present in the specified request.
      *
      * @param ctx            the context of the request.
+     * @param type           the parameter type.
      * @param skipValidation {@code true} to skip validation for the
      *                       parameter argument, {@code false} otherwise.
      * @return the argument for the parameter.
-     * @throws NullPointerException  if {@code ctx} is {@code null}.
+     * @throws NullPointerException  if {@code ctx} or {@code type}
+     *                               are {@code null}.
      * @throws HttpResponseException if the parameter is not present.
      */
-    public final T require(@NotNull Context ctx, boolean skipValidation) {
+    public final T require(@NotNull Context ctx,
+                           @NotNull ParameterType type,
+                           boolean skipValidation) {
         Objects.requireNonNull(ctx, "ctx cannot be null");
+        Objects.requireNonNull(type, "type cannot be null");
 
-        Map<String, List<String>> params = ctx.queryParamMap();
-        if (!params.containsKey(key)) {
+        List<String> args = type.getArgs(key, ctx);
+        if (args.isEmpty()) {
             int code = HttpCode.BAD_REQUEST.getStatus();
             String msg = "Missing required parameter";
             msg += " \"" + key + "\"";
             throw new HttpResponseException(code, msg);
         }
 
-        List<String> values = params.get(key);
-        return this.validate(ctx, values, skipValidation);
+        return this.validate(ctx, args, skipValidation);
     }
 
 
     /**
      * Requires that the parameter be present in the specified request.
      *
-     * @param ctx the context of the request.
+     * @param ctx  the context of the request.
+     * @param type the parameter type.
      * @return the argument for the parameter.
-     * @throws NullPointerException  if {@code ctx} is {@code null}.
+     * @throws NullPointerException  if {@code ctx} or {@code type}
+     *                               are {@code null}.
      * @throws HttpResponseException if the parameter is not present.
      */
-    public final T require(@NotNull Context ctx) {
-        return this.require(ctx, false);
+    public final T require(@NotNull Context ctx, @NotNull ParameterType type) {
+        return this.require(ctx, type, false);
     }
 
 }

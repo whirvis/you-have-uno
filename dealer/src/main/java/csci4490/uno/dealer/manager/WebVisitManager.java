@@ -2,8 +2,10 @@ package csci4490.uno.dealer.manager;
 
 import csci4490.uno.dealer.endpoint.Endpoint;
 import csci4490.uno.dealer.endpoint.Endpoints;
+import csci4490.uno.dealer.endpoint.ParameterType;
 import csci4490.uno.dealer.endpoint.StringParameter;
 import csci4490.uno.dealer.endpoint.UUIDParameter;
+import csci4490.uno.web.UnoVisit;
 import io.javalin.http.Context;
 import io.javalin.http.HandlerType;
 import io.javalin.http.HttpCode;
@@ -38,8 +40,8 @@ public class WebVisitManager {
     @Endpoint(type = HandlerType.POST, path = "/uno/visit/begin")
     public void begin(@NotNull Context ctx) throws SQLException {
         InetAddress address = Endpoints.getAddress(ctx);
-        UUID uuid = UUID_PARAM.require(ctx);
-        UUID accessToken = ACCESS_TOKEN_PARAM.require(ctx);
+        UUID uuid = UUID_PARAM.require(ctx, ParameterType.FORM);
+        UUID accessToken = ACCESS_TOKEN_PARAM.require(ctx, ParameterType.FORM);
 
         UnoVisit visit = manager.beginVisit(address, uuid, accessToken);
 
@@ -55,8 +57,9 @@ public class WebVisitManager {
     @Endpoint(type = HandlerType.POST, path = "/uno/visit/end")
     public void end(@NotNull Context ctx) throws SQLException {
         InetAddress address = Endpoints.getAddress(ctx);
-        UUID uuid = UUID_PARAM.require(ctx);
-        UUID sessionToken = SESSION_TOKEN_PARAM.require(ctx);
+        UUID uuid = UUID_PARAM.require(ctx, ParameterType.FORM);
+        UUID sessionToken = SESSION_TOKEN_PARAM.require(ctx,
+                ParameterType.FORM);
 
         if (!manager.endVisit(address, uuid, sessionToken)) {
             ctx.status(HttpCode.FORBIDDEN);
@@ -67,8 +70,9 @@ public class WebVisitManager {
     @Endpoint(type = HandlerType.POST, path = "/uno/visit/ping")
     public void ping(Context ctx) throws SQLException {
         InetAddress address = Endpoints.getAddress(ctx);
-        UUID uuid = UUID_PARAM.require(ctx);
-        UUID sessionToken = SESSION_TOKEN_PARAM.require(ctx);
+        UUID uuid = UUID_PARAM.require(ctx, ParameterType.FORM);
+        UUID sessionToken = SESSION_TOKEN_PARAM.require(ctx,
+                ParameterType.FORM);
 
         if (!manager.verifySession(address, uuid, sessionToken)) {
             ctx.status(HttpCode.FORBIDDEN);

@@ -4,6 +4,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import csci4490.uno.dealer.UnoDealer;
 import csci4490.uno.dealer.endpoint.Endpoint;
+import csci4490.uno.dealer.endpoint.ParameterType;
 import csci4490.uno.dealer.endpoint.StringParameter;
 import csci4490.uno.dealer.endpoint.UUIDParameter;
 import csci4490.uno.web.UnoAccount;
@@ -98,8 +99,8 @@ public class WebAccountManager {
 
     @Endpoint(type = HandlerType.POST, path = "/uno/account/create")
     public void create(@NotNull Context ctx) throws SQLException {
-        String username = USERNAME_PARAM.require(ctx);
-        String password = PASSWORD_PARAM.require(ctx);
+        String username = USERNAME_PARAM.require(ctx, ParameterType.FORM);
+        String password = PASSWORD_PARAM.require(ctx, ParameterType.FORM);
 
         if (manager.usernameExists(username)) {
             ctx.status(HttpCode.CONFLICT);
@@ -117,7 +118,7 @@ public class WebAccountManager {
 
     @Endpoint(type = HandlerType.POST, path = "/uno/account/uuid")
     public void uuid(@NotNull Context ctx) throws SQLException {
-        String username = USERNAME_PARAM.require(ctx);
+        String username = USERNAME_PARAM.require(ctx, ParameterType.QUERY);
 
         /*
          * Attempt to get the UUID for the account with the specified
@@ -133,9 +134,9 @@ public class WebAccountManager {
         ctx.json(response);
     }
 
-    @Endpoint(type = HandlerType.GET, path = "/uno/account/get")
-    public void get(@NotNull Context ctx) throws SQLException {
-        UUID uuid = UUID_PARAM.require(ctx);
+    @Endpoint(type = HandlerType.GET, path = "/uno/account/info")
+    public void info(@NotNull Context ctx) throws SQLException {
+        UUID uuid = UUID_PARAM.require(ctx, ParameterType.QUERY);
 
         UnoAccount account = manager.getAccount(uuid);
         JsonElement accountJson = UnoDealer.toJson(account);
