@@ -52,6 +52,18 @@ public class WebVisitManager {
         ctx.json(visit);
     }
 
+    @Endpoint(type = HandlerType.POST, path = "/uno/visit/end")
+    public void end(@NotNull Context ctx) throws SQLException {
+        InetAddress address = Endpoints.getAddress(ctx);
+        UUID uuid = UUID_PARAM.require(ctx);
+        UUID sessionToken = SESSION_TOKEN_PARAM.require(ctx);
+
+        if (!manager.endVisit(address, uuid, sessionToken)) {
+            ctx.status(HttpCode.FORBIDDEN);
+            ctx.result("Invalid UUID or access token");
+        }
+    }
+
     @Endpoint(type = HandlerType.POST, path = "/uno/visit/ping")
     public void ping(Context ctx) throws SQLException {
         InetAddress address = Endpoints.getAddress(ctx);

@@ -151,6 +151,32 @@ public class VisitManager {
     /* @formatter:on */
 
     /**
+     * Gracefully ends the visit session for a user.
+     *
+     * @param address      the IP address of the user.
+     * @param uuid         the UUID of the user.
+     * @param sessionToken the provided session token.
+     * @return {@code true} if the visit was ended, {@code false} if the
+     * session token provided by the user was invalid.
+     * @throws NullPointerException if {@code address}, {@code uuid}, or
+     *                              {@code sessionToken} are {@code null}.
+     * @throws SQLException         if an SQL error occurs.
+     */
+    public boolean endVisit(@NotNull InetAddress address, @NotNull UUID uuid,
+                            @NotNull UUID sessionToken) throws SQLException {
+        Objects.requireNonNull(address, "address cannot be null");
+        Objects.requireNonNull(uuid, "uuid cannot be null");
+        Objects.requireNonNull(sessionToken, "sessionToken cannot be null");
+
+        if (!this.verifySession(address, uuid, sessionToken)) {
+            return false;
+        }
+
+        this.invalidateSession(address, uuid);
+        return true;
+    }
+
+    /**
      * Verifies that a session token provided by a user from a certain IP
      * address is valid. This method should be used to authenticate users
      * before performing certain tasks, like joining a game.
