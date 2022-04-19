@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 public class Game 
 {
-	public Deck deck;
-	public ArrayList<Player>players;
+	private Deck deck;
+	private ArrayList<Player>players;
 	private ArrayList<Integer>playerScores;
 	private int numberOfPlayers;
 	private int numberOfGames;
@@ -13,7 +13,7 @@ public class Game
 	private Player currentPlayer;
 	private String playColor;
 	private Card faceUp;
-	public int playerIndex;
+	private int playerIndex;
 	private String direction;
 	private String left = "LEFT";
 	private String right = "RIGHT";
@@ -53,7 +53,7 @@ public class Game
 		return null;
 	}
 	
-	public Boolean setWildPlayColor(String color)
+	private Boolean setWildPlayColor(String color)
 	{
 		if (color.equals("GREEN") || color.equals("BLUE") || color.equals("RED") || color.equals("YELLOW"))
 		{
@@ -64,18 +64,18 @@ public class Game
 		return false;
 	}
 	
-	public String getWildPlayColor()
+	private String getWildPlayColor()
 	{
 		return playColor;
 	}
 	
-	public void setCardEffect(String effect)
+	private void setCardEffect(String effect)
 	{
 		this.effect = effect;
 	}
 	
 	
-	public void reverseDirection()
+	private void reverseDirection()
 	{
 		if (direction.equals(left))
 		{
@@ -87,7 +87,7 @@ public class Game
 		}
 	}
 	
-	public void rotateToNextPlayer()
+	private void rotateToNextPlayer()
 	{
 		
 		if (direction.equals(left))
@@ -104,7 +104,7 @@ public class Game
 		
 	}
 	
-	public void skipNextPlayer()
+	private void skipNextPlayer()
 	{
 		if(direction.equals(left))
 		{
@@ -120,7 +120,7 @@ public class Game
 	}
 	
 	
-	public ArrayList<Integer> getCurrentScores()
+	private ArrayList<Integer> getCurrentScores()
 	{
 		for (int i = 0; i < numberOfPlayers; i++)
 		{
@@ -129,7 +129,7 @@ public class Game
 		return playerScores;
 	}
 		
-	public Boolean checkForWinner()
+	private Boolean checkForWinner()
 	{
 		if (currentPlayer.getHand().getNumCards() == 0)
 		{
