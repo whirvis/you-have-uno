@@ -1,4 +1,4 @@
-package csci4490.uno.web;
+package csci4490.uno.dealer;
 
 import com.google.gson.annotations.SerializedName;
 import org.jetbrains.annotations.NotNull;

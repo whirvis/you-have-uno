@@ -26,7 +26,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Objects;
 
-public class UnoDealer {
+public class UnoDealerServer {
 
     private static final File CONFIG_DIR = new File("./dealer/config");
     private static final int WEBSERVER_PORT = 48902;
@@ -68,7 +68,7 @@ public class UnoDealer {
     private VisitManager visitManager;
     private boolean started;
 
-    private UnoDealer() {
+    private UnoDealerServer() {
         this.scheduler = new ThreadedScheduler();
     }
 
@@ -135,7 +135,7 @@ public class UnoDealer {
         Javalin webserver = Javalin.create(config -> {
             config.showJavalinBanner = false;
             config.jsonMapper(new GsonMapper(UnoJson.GSON));
-            config.server(UnoDealer::createServer);
+            config.server(UnoDealerServer::createServer);
         });
 
         Endpoints.handleExceptions(webserver);
@@ -162,7 +162,7 @@ public class UnoDealer {
     }
 
     public static void main(String[] args) throws Exception {
-        UnoDealer dealer = new UnoDealer();
+        UnoDealerServer dealer = new UnoDealerServer();
         dealer.start();
     }
 

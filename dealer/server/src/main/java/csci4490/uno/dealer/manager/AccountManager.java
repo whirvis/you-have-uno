@@ -1,8 +1,8 @@
 package csci4490.uno.dealer.manager;
 
 import csci4490.uno.commons.SaltGenerator;
-import csci4490.uno.dealer.UnoDealer;
-import csci4490.uno.web.UnoAccount;
+import csci4490.uno.dealer.UnoDealerServer;
+import csci4490.uno.dealer.UnoAccount;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -201,7 +201,7 @@ public class AccountManager {
         }
 
         String saltedPassword = password + passwordSalt;
-        String calculatedHash = UnoDealer.getMD5(db, saltedPassword);
+        String calculatedHash = UnoDealerServer.getMD5(db, saltedPassword);
         return calculatedHash.equals(passwordHash);
     }
     /* @formatter:on */

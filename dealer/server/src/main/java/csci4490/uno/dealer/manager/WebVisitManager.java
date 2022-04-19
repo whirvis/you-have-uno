@@ -5,7 +5,7 @@ import csci4490.uno.dealer.endpoint.Endpoints;
 import csci4490.uno.dealer.endpoint.ParameterType;
 import csci4490.uno.dealer.endpoint.StringParameter;
 import csci4490.uno.dealer.endpoint.UUIDParameter;
-import csci4490.uno.web.UnoVisit;
+import csci4490.uno.dealer.UnoVisit;
 import io.javalin.http.Context;
 import io.javalin.http.HandlerType;
 import io.javalin.http.HttpCode;

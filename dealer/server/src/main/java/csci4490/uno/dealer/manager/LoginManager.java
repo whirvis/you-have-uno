@@ -1,8 +1,8 @@
 package csci4490.uno.dealer.manager;
 
 import csci4490.uno.commons.SaltGenerator;
-import csci4490.uno.dealer.UnoDealer;
-import csci4490.uno.web.UnoLogin;
+import csci4490.uno.dealer.UnoDealerServer;
+import csci4490.uno.dealer.UnoLogin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -178,7 +178,7 @@ public class LoginManager {
         }
 
         String saltedAccessToken = accessToken + accessTokenSalt;
-        String calculatedHash = UnoDealer.getMD5(db, saltedAccessToken);
+        String calculatedHash = UnoDealerServer.getMD5(db, saltedAccessToken);
         return calculatedHash.equals(accessTokenHash);
     }
 

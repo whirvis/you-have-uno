@@ -1,5 +1,14 @@
-package csci4490.uno.web;
+package csci4490.uno.dealer;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import csci4490.uno.commons.UnoJson;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.config.Registry;
 import org.apache.http.config.RegistryBuilder;
@@ -10,20 +19,28 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.BasicHttpClientConnectionManager;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.ssl.SSLContexts;
 import org.jetbrains.annotations.NotNull;
 
 import javax.net.ssl.SSLContext;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.InetSocketAddress;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.security.GeneralSecurityException;
 import java.security.KeyStore;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.Scanner;
 
-public class UnoClient {
+public class UnoDealerClient {
 
     private static final int DEALER_PORT = 48902;
 
@@ -52,7 +69,7 @@ public class UnoClient {
          * this isn't an issue as the HTTP client will only send requests
          * to the official UNO dealer.
          */
-        URL unoTrustResource = UnoClient.class.getResource(unoTrustPath);
+        URL unoTrustResource = UnoDealerClient.class.getResource(unoTrustPath);
         if (unoTrustResource == null) {
             String msg = "missing " + unoTrustPath;
             throw new RuntimeException(msg);
@@ -111,8 +128,8 @@ public class UnoClient {
      *                      when testing the client.
      * @throws NullPointerException if {@code dealerAddress} is {@code null}.
      */
-    public UnoClient(@NotNull InetSocketAddress dealerAddress,
-                     boolean disableSSL) {
+    public UnoDealerClient(@NotNull InetSocketAddress dealerAddress,
+                           boolean disableSSL) {
         this.dealerAddress = Objects.requireNonNull(dealerAddress,
                 "dealerAddress cannot be null");
         this.disableSSL = disableSSL;
@@ -123,7 +140,7 @@ public class UnoClient {
      * Constructs a new {@code UnoClient} that will make requests to the
      * official Uno Dealer, specified via {@link #OFFICIAL}.
      */
-    public UnoClient() {
+    public UnoDealerClient() {
         this(OFFICIAL, false);
     }
 
@@ -153,6 +170,79 @@ public class UnoClient {
             return uri.build();
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    protected final void setFormParams(
+            @NotNull HttpEntityEnclosingRequestBase request,
+            @NotNull Map<String, String> params) {
+
+        List<BasicNameValuePair> pairs = new ArrayList<>();
+        for (Map.Entry<String, String> entry : params.entrySet()) {
+            String key = entry.getKey(), value = entry.getValue();
+            pairs.add(new BasicNameValuePair(key, value));
+        }
+
+        try {
+            request.setEntity(new UrlEncodedFormEntity(pairs));
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static String getStr(@NotNull HttpResponse response) throws IOException {
+        StringBuilder builder = new StringBuilder();
+        long length = response.getEntity().getContentLength();
+        for(int i = 0; i < length; i++) {
+            char c = (char) response.getEntity().getContent().read();
+            builder.append(c);
+        }
+        return builder.toString();
+    }
+
+    public UnoAccount createAccount(@NotNull String username,
+                                             @NotNull String password) {
+        URI endpoint = this.endpointURI("/uno/account/create");
+        HttpPost post = new HttpPost(endpoint);
+
+        Map<String, String> params = new HashMap<>();
+        params.put("username", username);
+        params.put("password", password);
+        this.setFormParams(post, params);
+
+        try (CloseableHttpResponse response = client.execute(post)) {
+
+            int code = response.getStatusLine().getStatusCode();
+            if(code != HttpStatus.SC_OK) {
+                System.err.println(getStr(response));
+                return null;
+            }
+
+            InputStream in = response.getEntity().getContent();
+            JsonObject responseJson = UnoJson.fromJson(in);
+            JsonElement accountJson = responseJson.get("account");
+            return UnoJson.fromJson(accountJson, UnoAccount.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static void main(String[] args) {
+        UnoDealerClient client = new UnoDealerClient(LOCALHOST, false);
+
+        Scanner s = new Scanner(System.in);
+
+        System.out.print("Enter username: ");
+        String username = s.nextLine();
+        System.out.print("Enter password: ");
+        String password = s.nextLine();
+
+        UnoAccount account = client.createAccount(username, password);
+        if(account != null) {
+            System.out.println("UUID: " + account.uuid);
+        } else {
+            System.err.println("Failed to create account.");
         }
     }
 
