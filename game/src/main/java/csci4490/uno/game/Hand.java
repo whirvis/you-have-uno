@@ -25,17 +25,33 @@ public class Hand
 	
 	
 		
-	public void removeCard(Card c)
+	public Boolean removeCard(Card c)
 	{
-		cards.remove(c);
-		score -= c.getScoreValue();
+		if (cards.contains(c))
+		{
+			cards.remove(c);
+			score -= c.getScoreValue();
+			return true;
+			
+		}
+		
+		return false;
+		
 		
 	}
 	
-	public void discard(Card c)
+	public Boolean discard(Card c)
 	{
-		removeCard(c);
-		playDeck.discard(c);
+		if (cards.contains(c))
+		{
+			removeCard(c);
+			playDeck.discard(c);
+			return true;
+			
+		}
+		
+		return false;
+		
 		
 	}
 	

@@ -10,11 +10,11 @@ class WildCard extends Card{
 	@Override
 	public Boolean matchCard(Card card) {
 		
-		//if (card.getColor().equals(this.getColor()))
-		//{
+		if (card.getValue().equals(this.value) ||card.getColor().equals(this.getColor()))
+		{
 			return true;
-		//}
-		//return false;
+		}
+		return false;
 	}
 	@Override 
 	public void setColor(String color)

@@ -2,8 +2,8 @@ package csci4490.uno.game;
 
 public class SkipCard extends SpecialCard {
 
-	public SkipCard(String color, String value) {
-		super(color, value);
+	public SkipCard(String color) {
+		super(color, "SKIP");
 		
 		
 		

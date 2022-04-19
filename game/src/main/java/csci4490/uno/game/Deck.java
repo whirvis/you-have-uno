@@ -60,15 +60,15 @@ public class Deck
 			playDeck.add(new DrawTwoCard(green, drawTwo));
 			playDeck.add(new DrawTwoCard(yellow, drawTwo));
 			
-			playDeck.add(new SkipCard(red, skip));
-			playDeck.add(new SkipCard(blue, skip));
-			playDeck.add(new SkipCard(green, skip));
-			playDeck.add(new SkipCard(yellow, skip));
+			playDeck.add(new SkipCard(red));
+			playDeck.add(new SkipCard(blue));
+			playDeck.add(new SkipCard(green));
+			playDeck.add(new SkipCard(yellow));
 			
-			playDeck.add(new ReverseCard(red, reverse));
-			playDeck.add(new ReverseCard(blue, reverse));
-			playDeck.add(new ReverseCard(green, reverse));
-			playDeck.add(new ReverseCard(yellow, reverse));
+			playDeck.add(new ReverseCard(red));
+			playDeck.add(new ReverseCard(blue));
+			playDeck.add(new ReverseCard(green));
+			playDeck.add(new ReverseCard(yellow));
 			
 			playDeck.add(new RegularCard(yellow, one));
 			playDeck.add(new RegularCard(yellow, two));
@@ -177,7 +177,6 @@ public class Deck
 	
 	public ArrayList<Hand> getHands()
 	{
-		
 		
 		return hands;
 	}
