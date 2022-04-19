@@ -11,6 +11,7 @@ class DeckTest {
 	
 	Deck deck = new Deck(3);
 	ArrayList<Hand> hands = deck.getHands();
+	Player player = new Player(hands.get(0), deck);
 
 	@Test
 	void setUp()
@@ -43,8 +44,8 @@ class DeckTest {
 	@Test
 	void testAddToHand() {
 		Deck deck = new Deck(3);
-		deck.addToHand(deck.getHands().get(0), deck.getPlayDeck().get(0));
-		assertTrue(deck.getHands().get(0).getNumCards() == 1 && deck.getPlayDeck().size() == 107);
+		deck.addToHand(player);
+		assertTrue(player.getHand().getNumCards() == 1 && deck.getPlayDeck().size() == 107);
 	}
 
 
@@ -70,6 +71,14 @@ class DeckTest {
 	@Test
 	void testGetPlayDeck() {
 		assertTrue(deck.getHands().size() == 3);
+	}
+	
+	@Test
+	void testFlipCard()
+	{
+		Card c = deck.getPlayDeck().get(0);
+		deck.flipCard();
+		assertTrue(c.equals(deck.getDiscards().get(deck.getDiscards().size()-1)));
 	}
 
 }

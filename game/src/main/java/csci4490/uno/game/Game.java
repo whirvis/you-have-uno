@@ -4,26 +4,30 @@ import java.util.ArrayList;
 
 public class Game 
 {
-	private Deck deck;
-	private ArrayList<Player>players;
+	public Deck deck;
+	public ArrayList<Player>players;
 	private ArrayList<Integer>playerScores;
 	private int numberOfPlayers;
 	private int numberOfGames;
 	private String effect;
-	private ArrayList<Integer>tournamentScoresRunning;
 	private Player currentPlayer;
 	private String playColor;
 	private Card faceUp;
+	public int playerIndex;
+	private String direction;
+	private String left = "LEFT";
+	private String right = "RIGHT";
 	
-	public Game(int numPlayers, int num_games)
+	
+	public Game(int numPlayers)
 	{
 		numberOfPlayers = numPlayers;
-		numberOfGames = num_games;
 		players = new ArrayList<Player>();
 		playerScores = new ArrayList<Integer>();
-		tournamentScoresRunning = new ArrayList<Integer>(0);
 		deck = new Deck(numberOfPlayers);
 		deck.dealCards();
+		direction = left;
+		playerIndex = 0;
 		
 		for (int i = 0; i < numberOfPlayers; i++)
 		{
@@ -35,21 +39,29 @@ public class Game
 	
 	public void start()
 	{
+		deck.flipCard();
 		faceUp = deck.getFaceUp();
-		currentPlayer = players.get(0);
-		
+		currentPlayer = players.get(playerIndex);
+	
 		
 	}
 	
 	
 	public String playTurn(Card c)
 	{
+		//TO DO
 		return null;
 	}
 	
-	public void setWildPlayColor(String color)
+	public Boolean setWildPlayColor(String color)
 	{
-		playColor = color;
+		if (color.equals("GREEN") || color.equals("BLUE") || color.equals("RED") || color.equals("YELLOW"))
+		{
+			playColor = color;
+			return true;
+		}
+		
+		return false;
 	}
 	
 	public String getWildPlayColor()
@@ -57,24 +69,53 @@ public class Game
 		return playColor;
 	}
 	
-	private void setCardEffect(String effect)
+	public void setCardEffect(String effect)
 	{
-		effect = effect;
+		this.effect = effect;
 	}
 	
 	
-	private void reverseDirection()
+	public void reverseDirection()
 	{
+		if (direction.equals(left))
+		{
+			direction = right;
+		}
+		else
+		{
+			direction = left;
+		}
+	}
+	
+	public void rotateToNextPlayer()
+	{
+		
+		if (direction.equals(left))
+		{
+			playerIndex = (playerIndex + 1)% numberOfPlayers;
+		}
+		else
+		{
+			playerIndex = (playerIndex + (numberOfPlayers -1)) % numberOfPlayers;
+		}
+		
+		
+		currentPlayer = players.get(playerIndex);
 		
 	}
 	
-	private void rotateToNextPlayer()
+	public void skipNextPlayer()
 	{
+		if(direction.equals(left))
+		{
+			playerIndex = (playerIndex + 2)% numberOfPlayers;
+		}
+		else
+		{
+			playerIndex = (playerIndex + (numberOfPlayers-2) % numberOfPlayers);
+		}
 		
-	}
-	
-	private void skipNextPlayer()
-	{
+		currentPlayer = players.get(playerIndex);
 		
 	}
 	
@@ -87,13 +128,8 @@ public class Game
 		}
 		return playerScores;
 	}
-	
-	public ArrayList<Integer> getTournamentScores()
-	{
-		return tournamentScoresRunning;
-	}
-	
-	private Boolean checkForWinner()
+		
+	public Boolean checkForWinner()
 	{
 		if (currentPlayer.getHand().getNumCards() == 0)
 		{

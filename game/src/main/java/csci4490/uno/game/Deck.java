@@ -9,6 +9,7 @@ public class Deck
 	private ArrayList<Card> discards;
 	ArrayList<Hand> hands;
 	int numHands;
+	Card faceUp;
 
 	
 	public Deck(int numHands)
@@ -129,6 +130,14 @@ public class Deck
 		
 	}
 	
+	public void flipCard()
+	{
+		Card c = playDeck.get(0);
+		playDeck.remove(c);
+		discard(c);
+		faceUp = c;
+	}
+	
 	public void discard(Card c)
 	{
 		
@@ -142,10 +151,10 @@ public class Deck
 		playDeck.remove(c);
 	}
 	
-	public void addToHand(Hand h, Card c)
+	public void addToHand(Player p)
 	{
-		h.addCard(c);
-		playDeck.remove(c);
+		p.getHand().addCard(getTopCard());
+		playDeck.remove(getTopCard());
 		
 	}
 	
@@ -161,6 +170,11 @@ public class Deck
 		}
 	}
 	
+	public Card getTopCard()
+	{
+		return playDeck.get(0);
+	}
+	
 	
 	public void shuffle()
 	{
@@ -171,7 +185,7 @@ public class Deck
 	
 	public Card getFaceUp()
 	{
-		return playDeck.get(0);
+		return faceUp;
 	}
 	
 	

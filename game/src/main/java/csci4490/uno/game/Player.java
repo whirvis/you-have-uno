@@ -34,6 +34,11 @@ public class Player
 		
 	}
 	
+	public void drawCardFromDeck()
+	{
+		deck.addToHand(this);
+	}
+	
 	public Hand getHand()
 	{
 		return hand;
