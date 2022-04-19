@@ -9,5 +9,3 @@ include ':dealer:server'
 include ':game:api'
 include ':game:client'
 include ':game:server'
-
-include ':network'

@@ -1,4 +1,4 @@
-package csci4490.uno.network;
+package csci4490.uno.commons.network;
 
 import io.netty.channel.Channel;
 import org.jetbrains.annotations.NotNull;

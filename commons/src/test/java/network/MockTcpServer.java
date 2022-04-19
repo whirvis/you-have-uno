@@ -1,5 +1,7 @@
-package csci4490.uno.network;
+package network;
 
+import csci4490.uno.commons.network.TcpServer;
+import csci4490.uno.commons.network.TcpSession;
 import io.netty.buffer.ByteBuf;
 import org.jetbrains.annotations.NotNull;
 
