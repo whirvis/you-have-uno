@@ -14,47 +14,12 @@ import java.util.UUID;
  * @see #getAccount()
  * @see #getAccessToken()
  */
-public class UnoLogin {
-
-    @SerializedName("account")
-    protected final @NotNull UnoAccount account;
-
-    @SerializedName("address")
-    protected final @NotNull InetAddress address;
-
-    @SerializedName("access_token")
-    protected final @NotNull UUID accessToken;
-
-    @SerializedName("expires_at")
-    protected final @NotNull Date expiration;
-
-    /**
-     * @param account     the account this logs in to.
-     * @param address     the login address.
-     * @param accessToken the access token used for login.
-     * @param expiration  the date this login expires.
-     * @throws NullPointerException if {@code account}, {@code address},
-     *                              {@code accessToken}, or {@code expiration}
-     *                              are {@code null}.
-     */
-    public UnoLogin(@NotNull UnoAccount account, @NotNull InetAddress address,
-                    @NotNull UUID accessToken, @NotNull Date expiration) {
-        this.account = Objects.requireNonNull(account,
-                "account cannot be null");
-        this.address = Objects.requireNonNull(address,
-                "address cannot be null");
-        this.accessToken = Objects.requireNonNull(accessToken,
-                "accessToken cannot be null");
-        this.expiration = Objects.requireNonNull(expiration,
-                "expiration cannot be null");
-    }
+public interface UnoLogin {
 
     /**
      * @return the account this logs in to.
      */
-    public @NotNull UnoAccount getAccount() {
-        return this.account;
-    }
+    @NotNull UnoAccount getAccount();
 
     /**
      * The address used for login is the only one that can use the access
@@ -64,9 +29,7 @@ public class UnoLogin {
      *
      * @return the login address.
      */
-    public @NotNull InetAddress getAddress() {
-        return this.address;
-    }
+    @NotNull InetAddress getAddress();
 
     /**
      * The access token is used for authenticating requests. Although a
@@ -80,9 +43,7 @@ public class UnoLogin {
      *
      * @return the login access token.
      */
-    public @NotNull UUID getAccessToken() {
-        return this.accessToken;
-    }
+    @NotNull UUID getAccessToken();
 
     /**
      * After this date, the access token can no longer be used for login.
@@ -90,8 +51,6 @@ public class UnoLogin {
      *
      * @return the expiration date for this login.
      */
-    public @NotNull Date getExpiration() {
-        return this.expiration;
-    }
+    @NotNull Date getExpiration();
 
 }

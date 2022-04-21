@@ -3,6 +3,7 @@ package csci4490.uno.dealer;
 import com.google.gson.annotations.SerializedName;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -12,26 +13,7 @@ import java.util.UUID;
  * @see #getUUID()
  * @see #getUsername()
  */
-public class UnoAccount {
-
-    @SerializedName("uuid")
-    protected final @NotNull UUID uuid;
-
-    @SerializedName("username")
-    protected @NotNull String username;
-
-    /**
-     * @param uuid     the account UUID.
-     * @param username the account username.
-     * @throws NullPointerException if {@code uuid} or {@code username}
-     *                              are {@code null}.
-     */
-    public UnoAccount(@NotNull UUID uuid, @NotNull String username) {
-        this.uuid = Objects.requireNonNull(uuid,
-                "uuid cannot be null");
-        this.username = Objects.requireNonNull(username,
-                "username cannot be null");
-    }
+public interface UnoAccount {
 
     /**
      * The UUID of an account is guaranteed to never be {@code null}, and to
@@ -40,9 +22,7 @@ public class UnoAccount {
      *
      * @return the account UUID.
      */
-    public final @NotNull UUID getUUID() {
-        return this.uuid;
-    }
+    @NotNull UUID getUUID();
 
     /**
      * The username, while guaranteed to never be {@code null}, is <i>not</i>
@@ -51,9 +31,7 @@ public class UnoAccount {
      *
      * @return the account username.
      */
-    public final @NotNull String getUsername() {
-        return this.username;
-    }
+    @NotNull String getUsername();
 
     /**
      * Updates the account username.
@@ -64,8 +42,9 @@ public class UnoAccount {
      *
      * @param username the account username.
      * @throws NullPointerException if {@code username} is {@code null}.
+     * @throws IOException          if an I/O error occurs.
      */
-    public void setUsername(@NotNull String username) {
+    default void setUsername(@NotNull String username) throws IOException {
         Objects.requireNonNull(username, "username cannot be null");
         throw new UnsupportedOperationException();
     }

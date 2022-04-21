@@ -1,42 +1,49 @@
 package csci4490.uno.dealer;
 
-import com.google.gson.annotations.SerializedName;
 import org.jetbrains.annotations.NotNull;
 
 import java.net.InetAddress;
-import java.util.Objects;
 import java.util.UUID;
 
-public class UnoVisit {
+/**
+ * Represents an UNO visit session.
+ *
+ * @see #getSessionToken()
+ */
+public interface UnoVisit {
 
-    @SerializedName("address")
-    protected final @NotNull InetAddress address;
+    /**
+     * @return the account this session represents.
+     */
+    @NotNull UnoAccount getAccount();
 
-    @SerializedName("session_token")
-    protected final @NotNull UUID sessionToken;
+    /**
+     * The address used for beginning the visit session is the only one that
+     * can use the session token. This is for the same reason an access token
+     * can only be used by the address it was issued to.
+     *
+     * @return the session address.
+     */
+    @NotNull InetAddress getAddress();
 
-    @SerializedName("last_keep_alive")
-    protected long lastKeepAlive;
+    /**
+     * The session token is used for authenticating requests. This is
+     * required by endpoints which expect the user to be logged in.
+     * <p>
+     * <b>Note:</b> By design, only the IP address that requested the
+     * session token may use it.
+     *
+     * @return the login access token.
+     */
+    @NotNull UUID getSessionToken();
 
-    public UnoVisit(@NotNull InetAddress address, @NotNull UUID sessionToken,
-                    long lastKeepAlive) {
-        this.address = Objects.requireNonNull(address,
-                "address cannot be null");
-        this.sessionToken = Objects.requireNonNull(sessionToken,
-                "sessionToken cannot be null");
-        this.lastKeepAlive = lastKeepAlive;
-    }
-
-    public @NotNull InetAddress getAddress() {
-        return this.address;
-    }
-
-    public @NotNull UUID getSessionToken() {
-        return this.sessionToken;
-    }
-
-    public long getLastKeepAlive() {
-        return this.lastKeepAlive;
-    }
+    /**
+     * A keep alive is employed by the UNO dealer server to determine if
+     * an UNO account is still online. A keep alive must be sent at least
+     * once every thirty seconds to be considered online.
+     *
+     * @return the last keep alive time, specified in milliseconds.
+     */
+    long getLastKeepAlive();
 
 }
