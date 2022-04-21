@@ -2,12 +2,27 @@ package csci4490.uno.dealer;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.net.InetSocketAddress;
+
 /**
  * Container for endpoints of the UNO dealer server. This exists to ensure
  * the strings used for endpoint paths are the same. This allows them to be
  * changed easily in an IDE.
  */
 public class UnoEndpoints {
+
+    /**
+     * The default port for the Uno Dealer Webserver.
+     */
+    private static final int SERVER_PORT = 48902;
+
+    /* @formatter:off */
+    /**
+     * Addresses for an Uno Dealer Webserver.
+     */
+    public static final @NotNull InetSocketAddress
+            LOCALHOST = new InetSocketAddress("localhost", SERVER_PORT),
+            OFFICIAL = new InetSocketAddress("uno.whirvis.net", SERVER_PORT);
 
     /* @formatter:off */
     /**
