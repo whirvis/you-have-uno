@@ -10,9 +10,9 @@ public class Deck
 	ArrayList<Hand> hands;
 	int numHands;
 	Card faceUp;
-
+	Game game;
 	
-	public Deck(int numHands)
+	public Deck(int numHands, Game game)
 	{
 		final String red = "RED";
 		final String blue = "BLUE";
@@ -34,6 +34,7 @@ public class Deck
 		final String nine = "9";
 		playDeck = new ArrayList<Card>();
 		discards = new ArrayList<Card>();
+		this.game = game;
 		
 		hands = new ArrayList<Hand>();
 		this.numHands = numHands;
@@ -51,8 +52,8 @@ public class Deck
 		
 		for (int i = 0; i < 4; i++)
 		{
-			playDeck.add(new Draw4Card());
-			playDeck.add(new WildCard());
+			playDeck.add(new Draw4Card(game));
+			playDeck.add(new WildCard(game));
 		}
 		for (int i = 0; i < 2; i++)
 		{
@@ -113,7 +114,7 @@ public class Deck
 
 		}
 		
-		Collections.shuffle(playDeck);
+		//Collections.shuffle(playDeck);
 		
 	}
 	
@@ -125,6 +126,8 @@ public class Deck
 			{
 				hands.get(j).addCard(playDeck.get(0));
 				playDeck.remove(0);
+			
+				
 			}
 		}	
 		
@@ -142,6 +145,7 @@ public class Deck
 	{
 		
 		discards.add(c);
+		faceUp = c;
 		
 		
 	}
@@ -153,9 +157,15 @@ public class Deck
 	
 	public void addToHand(Player p)
 	{
+		if (isEmpty())
+		{
+			shuffle();
+			
+		}
 		p.getHand().addCard(getTopCard());
 		playDeck.remove(getTopCard());
-		
+		flipCard();
+	
 	}
 	
 	public Boolean isEmpty()
@@ -172,6 +182,10 @@ public class Deck
 	
 	public Card getTopCard()
 	{
+		if (isEmpty())
+		{
+			shuffle();
+		}
 		return playDeck.get(0);
 	}
 	

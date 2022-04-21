@@ -8,8 +8,8 @@ import org.junit.jupiter.api.Test;
 
 class DeckTest {
 	
-	
-	Deck deck = new Deck(3);
+	Game game = new Game(3);
+	Deck deck = new Deck(3,game);
 	ArrayList<Hand> hands = deck.getHands();
 	Player player = new Player(hands.get(0), deck);
 
@@ -29,21 +29,21 @@ class DeckTest {
 
 	@Test
 	void testDiscard() {
-		Deck deck = new Deck(3);
+		Deck deck = new Deck(3,game);
 		deck.discard(deck.getPlayDeck().get(0));
 		assertTrue(deck.getDiscards().size() == 1);
 	}
 
 	@Test
 	void testRemoveCard() {
-		Deck deck = new Deck(3);
+		Deck deck = new Deck(3,game);
 		deck.removeCard(deck.getPlayDeck().get(0));
 		assertTrue(deck.getPlayDeck().size() == 107);
 	}
 
 	@Test
 	void testAddToHand() {
-		Deck deck = new Deck(3);
+		Deck deck = new Deck(3,game);
 		deck.addToHand(player);
 		assertTrue(player.getHand().getNumCards() == 1 && deck.getPlayDeck().size() == 107);
 	}
@@ -56,7 +56,7 @@ class DeckTest {
 
 	@Test
 	void testGetDiscards() {
-		Deck deck = new Deck(3);
+		Deck deck = new Deck(3,game);
 		int size_1 = deck.getDiscards().size();
 		for (int i = 0; i < deck.getPlayDeck().size(); i++)
 		{

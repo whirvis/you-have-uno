@@ -10,12 +10,13 @@ class RegularCardTest {
 	private String blue = "BLUE";
 	private String nine = "9";
 	private String zero = "0";
+	Game game = new Game(3);
 	String none = "NONE";
 	Card red1 = new RegularCard(red, nine);
 	Card blue0 = new RegularCard(blue, zero);
 	Card blue1 = new RegularCard(blue,nine);
 	Card red0 = new RegularCard(red,zero);
-	Card wildCard = new WildCard();
+	Card wildCard = new WildCard(game);
 
 	@Test
 	void testMatchCard1() {
@@ -41,6 +42,13 @@ class RegularCardTest {
 	void testMatchCard5() {
 		assertFalse(blue0.matchCard(red1));
 	}
+	
+	@Test
+	void testMatchCard6() {
+		game.setWildPlayColor(blue);
+		assertFalse(wildCard.matchCard(red1));
+	}
+
 
 	@Test
 	void testApplyCardEffect() {

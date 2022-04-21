@@ -1,16 +1,18 @@
 package csci4490.uno.game;
 
 class WildCard extends Card{
-	
-	public WildCard()
+	Game game;
+	public WildCard(Game g)
 	{
+		this.color = "NONE";
 		this.value = "WILD";
 		setScoreValue(50);
+		game = g;
 	}
 	@Override
 	public Boolean matchCard(Card card) {
 		
-		if (card.getValue().equals(this.value) ||card.getColor().equals(this.getColor()))
+		if (card.getValue().equals(this.value) || card.getColor().equals(game.getWildPlayColor()))
 		{
 			return true;
 		}
@@ -23,8 +25,13 @@ class WildCard extends Card{
 	}
 	@Override
 	public String applyCardEffect() {
-		// TODO Auto-generated method stub
+		
 		return "WILD";
+	}
+	
+	public String toString()
+	{
+		return value;
 	}
 	
 }

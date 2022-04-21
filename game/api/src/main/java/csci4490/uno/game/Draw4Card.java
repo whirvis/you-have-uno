@@ -2,8 +2,9 @@ package csci4490.uno.game;
 
 public class Draw4Card extends WildCard {
 	
-	public Draw4Card() {
-		super();
+	public Draw4Card(Game g) {
+		super(g);
+		this.value = "WILD_4";
 		
 	}
 

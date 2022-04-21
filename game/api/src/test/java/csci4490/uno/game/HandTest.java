@@ -15,8 +15,9 @@ class HandTest {
 	Card blue0 = new RegularCard(blue, zero);
 	Card blue1 = new RegularCard(blue,nine);
 	Card red0 = new RegularCard(red,zero);
-	Card wildCard = new WildCard();
-	Deck deck = new Deck(4);
+	Game game = new Game(3);
+	Card wildCard = new WildCard(game);
+	Deck deck = new Deck(4,game);
 
 	@Test
 	void testAddCard() {

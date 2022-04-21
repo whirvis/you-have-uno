@@ -10,13 +10,14 @@ class Draw4CardTest {
 	private String blue = "BLUE";
 	private String nine = "9";
 	private String zero = "0";
-	String wild = "WILD";
+	String wild = "WILD_4";
 	String drawFour = "WILD_DRAW_FOUR";
+	Game game = new Game(4);
 	Card red1 = new RegularCard(red, nine);
 	Card blue0 = new RegularCard(blue, zero);
 	Card blue1 = new RegularCard(blue,nine);
 	Card red0 = new RegularCard(red,zero);
-	Card draw4 = new Draw4Card();
+	Card draw4 = new Draw4Card(game);
 
 
 	@Test
@@ -32,19 +33,17 @@ class Draw4CardTest {
 
 	@Test
 	void testMatchCard() {
-		draw4.setColor(blue);
+		game.setWildPlayColor(blue);
 		assertFalse(draw4.matchCard(red0));
 	}
 	
 	@Test
 	void testMatchCard1() {
-		draw4.setColor(null);
 		assertTrue(draw4.matchCard(draw4));
 	}
 	
 	@Test
 	void testMatchCard2() {
-		draw4.setColor(null);
 		assertTrue(blue0.matchCard(draw4));
 	}
 

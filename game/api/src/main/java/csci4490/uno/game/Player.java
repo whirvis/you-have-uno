@@ -20,17 +20,17 @@ public class Player
 		return score;
 	}
 	
-	public Boolean playCard(Card c)
+	public void playCard(Card c) throws IllegalMoveException
 	{
 		
 		if (deck.getFaceUp().matchCard(c) == true && hand.getCards().contains(c))
 		{
 			hand.discard(c);
-			return true;
 		}
-		
-		return false;
-		
+		else
+		{
+			throw new IllegalMoveException("CARD DOES NOT MATCH");
+		}
 		
 	}
 	

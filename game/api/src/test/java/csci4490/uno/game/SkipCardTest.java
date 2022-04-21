@@ -11,11 +11,12 @@ class SkipCardTest {
 	private String nine = "9";
 	private String zero = "0";
 	String none = "NONE";
+	Game game = new Game(2);
 	Card red1 = new RegularCard(red, nine);
 	Card blue0 = new RegularCard(blue, zero);
 	Card blue1 = new RegularCard(blue,nine);
 	Card red0 = new RegularCard(red,zero);
-	Card wildCard = new WildCard();
+	Card wildCard = new WildCard(game);
 	Card revRed = new SkipCard(red);
 	Card revBlue = new SkipCard(blue);
 	Card reverseRed = new ReverseCard(red);
@@ -79,6 +80,12 @@ class SkipCardTest {
 	@Test
 	void testMatchCard10() {
 		assertTrue(revRed.matchCard(wildCard));
+	}
+	
+	@Test
+	void testMatchCard11() {
+		game.setWildPlayColor(red);
+		assertTrue(wildCard.matchCard(revRed));
 	}
 	
 	

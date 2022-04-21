@@ -36,9 +36,10 @@ abstract class Card {
 	abstract public Boolean matchCard(Card card);
 	abstract public String applyCardEffect();
 	
+	/*toString will spit out an identifier for a card*/
 	public String toString()
 	{
-		return color + ", " + value + " ," + applyCardEffect();
+		return color + "_" + value;
 	}
 
 	protected abstract void setColor(String color);

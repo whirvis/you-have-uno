@@ -17,10 +17,14 @@ public class Hand
 		score = 0;
 	}
 	
-	public void addCard(Card c)
+	public void addCard(Card c) 
 	{
+		
 		cards.add(c);
 		score += c.getScoreValue();
+			
+		
+		
 	}
 	
 	
