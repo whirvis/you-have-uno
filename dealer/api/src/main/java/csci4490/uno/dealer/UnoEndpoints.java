@@ -14,7 +14,7 @@ public class UnoEndpoints {
     /**
      * The default port for the Uno Dealer Webserver.
      */
-    private static final int SERVER_PORT = 48902;
+    public static final int SERVER_PORT = 48902;
 
     /* @formatter:off */
     /**

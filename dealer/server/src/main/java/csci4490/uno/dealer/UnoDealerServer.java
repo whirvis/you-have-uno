@@ -30,7 +30,6 @@ public class UnoDealerServer {
 
     private static final String CONFIG_DIR_PATH = "./dealer/server/config";
     private static final File CONFIG_DIR = new File(CONFIG_DIR_PATH);
-    private static final int WEBSERVER_PORT = 48902;
 
     /**
      * Hashes a string with MD5 via MySQL.
@@ -125,7 +124,7 @@ public class UnoDealerServer {
         }
 
         ServerConnector connector = new ServerConnector(server, sslContext);
-        connector.setPort(WEBSERVER_PORT);
+        connector.setPort(UnoEndpoints.SERVER_PORT);
 
         Connector[] connectors = new Connector[1];
         connectors[0] = connector;
