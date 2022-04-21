@@ -1,5 +1,7 @@
 package csci4490.uno.dealer.manager;
 
+import com.google.gson.JsonObject;
+import csci4490.uno.commons.UnoJson;
 import csci4490.uno.dealer.endpoint.Endpoint;
 import csci4490.uno.dealer.endpoint.Endpoints;
 import csci4490.uno.dealer.endpoint.ParameterType;
@@ -14,6 +16,8 @@ import org.jetbrains.annotations.NotNull;
 import java.net.InetAddress;
 import java.sql.SQLException;
 import java.util.UUID;
+
+import static csci4490.uno.dealer.UnoEndpoints.*;
 
 /**
  * Container for endpoint methods to access {@link VisitManager}
@@ -37,7 +41,7 @@ public class WebVisitManager {
         this.manager = manager;
     }
 
-    @Endpoint(type = HandlerType.POST, path = "/uno/visit/begin")
+    @Endpoint(type = HandlerType.POST, path = UNO_VISIT_BEGIN)
     public void begin(@NotNull Context ctx) throws SQLException {
         InetAddress address = Endpoints.getAddress(ctx);
         UUID uuid = UUID_PARAM.require(ctx, ParameterType.FORM);
@@ -51,10 +55,12 @@ public class WebVisitManager {
             return;
         }
 
-        ctx.json(visit);
+        JsonObject response = new JsonObject();
+        response.add("visit", UnoJson.toJson(visit));
+        ctx.json(response);
     }
 
-    @Endpoint(type = HandlerType.POST, path = "/uno/visit/end")
+    @Endpoint(type = HandlerType.POST, path = UNO_VISIT_END)
     public void end(@NotNull Context ctx) throws SQLException {
         InetAddress address = Endpoints.getAddress(ctx);
         UUID uuid = UUID_PARAM.require(ctx, ParameterType.FORM);
@@ -67,7 +73,7 @@ public class WebVisitManager {
         }
     }
 
-    @Endpoint(type = HandlerType.POST, path = "/uno/visit/ping")
+    @Endpoint(type = HandlerType.POST, path = UNO_VISIT_PING)
     public void ping(Context ctx) throws SQLException {
         InetAddress address = Endpoints.getAddress(ctx);
         UUID uuid = UUID_PARAM.require(ctx, ParameterType.FORM);

@@ -1,6 +1,7 @@
 package csci4490.uno.dealer.manager;
 
 import com.google.gson.JsonObject;
+import csci4490.uno.commons.UnoJson;
 import csci4490.uno.dealer.endpoint.Endpoint;
 import csci4490.uno.dealer.endpoint.Endpoints;
 import csci4490.uno.dealer.endpoint.ParameterType;
@@ -15,6 +16,8 @@ import org.jetbrains.annotations.NotNull;
 import java.net.InetAddress;
 import java.sql.SQLException;
 import java.util.UUID;
+
+import static csci4490.uno.dealer.UnoEndpoints.*;
 
 /**
  * Container for endpoint methods to access {@link LoginManager}
@@ -37,7 +40,7 @@ public class WebLoginManager {
         this.manager = manager;
     }
 
-    @Endpoint(type = HandlerType.POST, path = "/uno/login")
+    @Endpoint(type = HandlerType.POST, path = UNO_LOGIN)
     public void login(@NotNull Context ctx) throws SQLException {
         InetAddress address = Endpoints.getAddress(ctx);
         UUID uuid = UUID_PARAM.require(ctx, ParameterType.FORM);
@@ -51,10 +54,12 @@ public class WebLoginManager {
             return;
         }
 
-        ctx.json(login);
+        JsonObject response = new JsonObject();
+        response.add("login", UnoJson.toJson(login));
+        ctx.json(response);
     }
 
-    @Endpoint(type = HandlerType.POST, path = "/uno/login/verify")
+    @Endpoint(type = HandlerType.POST, path = UNO_LOGIN_VERIFY)
     public void verify(@NotNull Context ctx) throws SQLException {
         InetAddress address = Endpoints.getAddress(ctx);
         UUID uuid = UUID_PARAM.require(ctx, ParameterType.FORM);

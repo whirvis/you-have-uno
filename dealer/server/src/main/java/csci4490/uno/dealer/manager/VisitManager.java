@@ -3,6 +3,8 @@ package csci4490.uno.dealer.manager;
 import csci4490.uno.commons.scheduler.JobRunnable;
 import csci4490.uno.commons.scheduler.ScheduledJob;
 import csci4490.uno.commons.scheduler.Scheduler;
+import csci4490.uno.dealer.StaticUnoVisit;
+import csci4490.uno.dealer.UnoAccount;
 import csci4490.uno.dealer.UnoVisit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -23,6 +25,7 @@ public class VisitManager {
     private final Connection db;
     private final WebVisitManager webManager;
 
+    private AccountManager accountManager;
     private LoginManager loginManager;
     private ScheduledJob removeVisitsJob;
 
@@ -35,9 +38,29 @@ public class VisitManager {
         return this.webManager;
     }
 
+    private void requireAccountManager() {
+        if (accountManager == null) {
+            throw new IllegalStateException("account manager not set");
+        }
+    }
+
+    /**
+     * Sets the account manager for this login manager. This is required for
+     * select operations, like user account login.
+     *
+     * @param manager the account manager to use.
+     * @throws NullPointerException  if {@code manager} is {@code null}.
+     * @throws IllegalStateException if an account manager has already been
+     *                               set for this login manager.
+     */
+    public void setAccountManager(@NotNull AccountManager manager) {
+        Objects.requireNonNull(manager, "manager cannot be null");
+        this.accountManager = manager;
+    }
+
     private void requireLoginManager() {
         if (loginManager == null) {
-            throw new IllegalStateException("");
+            throw new IllegalStateException("login manager not set");
         }
     }
 
@@ -122,6 +145,8 @@ public class VisitManager {
         Objects.requireNonNull(uuid, "uuid cannot be null");
         Objects.requireNonNull(accessToken, "accessToken cannot be null");
 
+        this.requireAccountManager();
+
         this.requireLoginManager();
         if (!loginManager.verifyAccess(address, uuid, accessToken)) {
             return null; /* invalid access token */
@@ -146,7 +171,14 @@ public class VisitManager {
             stmt.execute();
         }
 
-        return new UnoVisit(address, sessionToken, currentTime);
+        UnoAccount account = accountManager.getAccount(uuid);
+        if (account == null) {
+            String msg = "ghost login for account";
+            msg += " with UUID " + uuid + ", this is a bug";
+            throw new SQLException(msg);
+        }
+
+        return new StaticUnoVisit(account, address, sessionToken, currentTime);
     }
     /* @formatter:on */
 
@@ -201,7 +233,7 @@ public class VisitManager {
         UUID storedSessionToken; /* initialized by query */
 
         String sql = "SELECT keep_alive, session_token FROM visit";
-        sql += " WHERE INET6_ATON(ip_address) = ? AND uuid = ?";
+        sql += " WHERE ip_address = INET6_ATON(?) AND uuid = ?";
         try (PreparedStatement stmt = db.prepareStatement(sql)) {
             stmt.setString(1, address.getHostAddress());
             stmt.setString(2, uuid.toString());

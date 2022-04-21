@@ -1,6 +1,8 @@
 package csci4490.uno.dealer.manager;
 
 import csci4490.uno.commons.SaltGenerator;
+import csci4490.uno.dealer.StaticUnoLogin;
+import csci4490.uno.dealer.UnoAccount;
 import csci4490.uno.dealer.UnoDealerServer;
 import csci4490.uno.dealer.UnoLogin;
 import org.jetbrains.annotations.NotNull;
@@ -45,7 +47,7 @@ public class LoginManager {
 
     private void requireAccountManager() {
         if (accountManager == null) {
-            throw new IllegalStateException("");
+            throw new IllegalStateException("account manager not set");
         }
     }
 
@@ -129,7 +131,14 @@ public class LoginManager {
             stmt.execute();
         }
 
-        return new UnoLogin(address, uuid, accessToken, expiresAt);
+        UnoAccount account = accountManager.getAccount(uuid);
+        if (account == null) {
+            String msg = "ghost login for account";
+            msg += " with UUID " + uuid + ", this is a bug";
+            throw new SQLException(msg);
+        }
+
+        return new StaticUnoLogin(account, address, accessToken, expiresAt);
     }
 
     /**
@@ -168,7 +177,7 @@ public class LoginManager {
                 return false;
             }
 
-            Date expiresAt = query.getDate("expires_at");
+            Date expiresAt = query.getDate("expires_on");
             if (currentTime > expiresAt.getTime()) {
                 return false;
             }

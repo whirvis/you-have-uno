@@ -3,6 +3,7 @@ package csci4490.uno.dealer.manager;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import csci4490.uno.commons.UnoJson;
+import csci4490.uno.dealer.UnoEndpoints;
 import csci4490.uno.dealer.endpoint.Endpoint;
 import csci4490.uno.dealer.endpoint.ParameterType;
 import csci4490.uno.dealer.endpoint.StringParameter;
@@ -18,6 +19,8 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+
+import static csci4490.uno.dealer.UnoEndpoints.*;
 
 /**
  * Container for endpoint methods to access {@link AccountManager}
@@ -97,7 +100,7 @@ public class WebAccountManager {
         this.manager = manager;
     }
 
-    @Endpoint(type = HandlerType.POST, path = "/uno/account/create")
+    @Endpoint(type = HandlerType.POST, path = UNO_ACCOUNT_CREATE)
     public void create(@NotNull Context ctx) throws SQLException {
         String username = USERNAME_PARAM.require(ctx, ParameterType.FORM);
         String password = PASSWORD_PARAM.require(ctx, ParameterType.FORM);
@@ -116,7 +119,7 @@ public class WebAccountManager {
         ctx.json(response);
     }
 
-    @Endpoint(type = HandlerType.POST, path = "/uno/account/uuid")
+    @Endpoint(type = HandlerType.GET, path = UNO_ACCOUNT_UUID)
     public void uuid(@NotNull Context ctx) throws SQLException {
         String username = USERNAME_PARAM.require(ctx, ParameterType.QUERY);
 
@@ -134,7 +137,7 @@ public class WebAccountManager {
         ctx.json(response);
     }
 
-    @Endpoint(type = HandlerType.GET, path = "/uno/account/info")
+    @Endpoint(type = HandlerType.GET, path = UNO_ACCOUNT_INFO)
     public void info(@NotNull Context ctx) throws SQLException {
         UUID uuid = UUID_PARAM.require(ctx, ParameterType.QUERY);
 

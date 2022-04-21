@@ -28,7 +28,8 @@ import java.util.Objects;
 
 public class UnoDealerServer {
 
-    private static final File CONFIG_DIR = new File("./dealer/config");
+    private static final String CONFIG_DIR_PATH = "./dealer/server/config";
+    private static final File CONFIG_DIR = new File(CONFIG_DIR_PATH);
     private static final int WEBSERVER_PORT = 48902;
 
     /**
@@ -95,6 +96,8 @@ public class UnoDealerServer {
         this.visitManager = new VisitManager(dbConnection);
 
         loginManager.setAccountManager(accountManager);
+        visitManager.setAccountManager(accountManager);
+
         visitManager.setLoginManager(loginManager);
     }
 
