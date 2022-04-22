@@ -3,7 +3,7 @@
  * Home Page Frame
  */
 
-package unogame;
+package csci4490.uno.client;
 
 import java.awt.BorderLayout;
 import java.awt.Color;

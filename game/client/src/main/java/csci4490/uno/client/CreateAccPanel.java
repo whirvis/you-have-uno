@@ -3,7 +3,7 @@
  * Create Account Panel
  */
 
-package unogame;
+package csci4490.uno.client;
 
 import javax.swing.JPanel;
 import javax.swing.JLabel;
