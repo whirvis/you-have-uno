@@ -121,6 +121,8 @@ public class UnoDealerServer {
         String disableJks = System.getProperty("disable_jks", "false");
         if (!Boolean.parseBoolean(disableJks)) {
             sslContext = getSSLContext();
+        } else {
+            System.out.println("WARNING: DISABLED JKS ON DEALER SERVER");
         }
 
         ServerConnector connector = new ServerConnector(server, sslContext);

@@ -155,17 +155,18 @@ public class UnoDealerClient {
      * UNO dealer at the specified address.
      *
      * @param dealerAddress the address of the UNO dealer.
-     * @param disableSSL    {@code true} to disable SSL, {@code false}
-     *                      otherwise. Disabling SSL poses a major security
-     *                      risk. As such, this should only be {@code true}
-     *                      when testing the client.
      * @throws NullPointerException if {@code dealerAddress} is {@code null}.
      */
-    public UnoDealerClient(@NotNull InetSocketAddress dealerAddress,
-                           boolean disableSSL) {
+    public UnoDealerClient(@NotNull InetSocketAddress dealerAddress) {
         this.dealerAddress = Objects.requireNonNull(dealerAddress,
                 "dealerAddress cannot be null");
-        this.disableSSL = disableSSL;
+
+        String disableJks = System.getProperty("disable_jks", "false");
+        this.disableSSL = Boolean.parseBoolean(disableJks);
+        if (disableSSL) {
+            System.out.println("WARNING: DISABLED JKS ON DEALER CLIENT");
+        }
+
         this.http = createHttpClient(disableSSL);
     }
 
@@ -174,7 +175,7 @@ public class UnoDealerClient {
      * official Uno Dealer, specified via {@link UnoEndpoints#OFFICIAL}.
      */
     public UnoDealerClient() {
-        this(OFFICIAL, false);
+        this(OFFICIAL);
     }
 
     public final boolean isSSLDisabled() {
