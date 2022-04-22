@@ -1,6 +1,5 @@
-package network;
+package csci4490.uno.commons.network;
 
-import csci4490.uno.commons.network.NetUtils;
 import org.junit.jupiter.api.Test;
 
 import java.util.Random;

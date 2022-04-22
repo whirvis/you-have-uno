@@ -1,7 +1,5 @@
-package network;
+package csci4490.uno.commons.network;
 
-import csci4490.uno.commons.network.TcpServer;
-import csci4490.uno.commons.network.TcpServerChannelInitializer;
 import io.netty.channel.socket.SocketChannel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
