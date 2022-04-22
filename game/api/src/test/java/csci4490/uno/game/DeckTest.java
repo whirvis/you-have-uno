@@ -44,7 +44,12 @@ class DeckTest {
 	@Test
 	void testAddToHand() {
 		Deck deck = new Deck(3,game);
-		deck.addToHand(player);
+		try {
+			deck.addToHand(player);
+		} catch (IllegalMoveException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		assertTrue(player.getHand().getNumCards() == 1 && deck.getPlayDeck().size() == 107);
 	}
 

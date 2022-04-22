@@ -27,9 +27,24 @@ class PlayerTest {
 	void testGetScore() {
 		
 		int score_empty = player.getScore();
-		hand.addCard(wildCard);
-		hand.addCard(blue0);
-		hand.addCard(red1);
+		try {
+			hand.addCard(wildCard);
+		} catch (IllegalMoveException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			hand.addCard(blue0);
+		} catch (IllegalMoveException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			hand.addCard(red1);
+		} catch (IllegalMoveException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		int score_added = player.getScore();
 		assertTrue(score_empty == 0 && score_added == 59);
@@ -40,9 +55,15 @@ class PlayerTest {
 	void testDrawCardFromDeck() {
 		
 		int hand_initial = player.getHand().getNumCards();
+		
 		player.drawCardFromDeck();
+	
+	
 		player.drawCardFromDeck();
+	
+	
 		player.drawCardFromDeck();
+		
 		int hand_after = player.getHand().getNumCards();
 		
 		assertTrue(hand_after == 3 && hand_initial == 0);

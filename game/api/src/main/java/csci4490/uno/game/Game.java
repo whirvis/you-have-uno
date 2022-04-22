@@ -9,9 +9,9 @@ public class Game implements UnoInterface
 	private ArrayList<Player>players;
 	private ArrayList<Integer>playerScores;
 	private int numberOfPlayers;
-	private String effect;
+	private String effect = "NONE";
 	private Player currentPlayer;
-	private String playColor;
+	private String playColor = "NONE";
 	private int playerIndex;
 	private String direction;
 	private String left = "LEFT";
@@ -25,9 +25,11 @@ public class Game implements UnoInterface
 	private String skip = "SKIP";
 	private String reverse = "REVERSE";
 	private String wild = "WILD";
+	private String move;
 	
 	public Game(int numPlayers)
 	{
+		
 		
 		numberOfPlayers = numPlayers;
 		players = new ArrayList<Player>();
@@ -44,13 +46,15 @@ public class Game implements UnoInterface
 		
 	}
 	
+	
 	/*Start a game of Uno, return initial state of the board.*/
 	public State init()
 	{
+		
 		deck.dealCards();
 		deck.flipCard();
 		currentPlayer = players.get(playerIndex);
-		
+		effect = deck.getFaceUp().applyCardEffect();
 		state.setFaceUp(deck.getFaceUp());
 		state.setNextPlayer(playerIndex);
 		return state;
@@ -64,76 +68,143 @@ public class Game implements UnoInterface
 	/*Make a turn on behalf of the current player. */
 	public void playTurn(TurnData data) throws IllegalMoveException
 	{ 
-		String move = data.getAction();
-		
-		
-		//add two cards to the player's hand and move to the next player
-		if (effect.equals(draw2))
+	
+		if(data.getAction().equals(setColor))
+		{
+			setWildPlayColor(data.getColor());
+			state.setPlayerHand(currentPlayer.getHand());
+			state.setNextPlayer(getNextPlayer());
+			if (deck.isEmpty())
+			{
+				deck.shuffle();
+				state.setDeckTurnedOver(true);
+			}
+			else
+			{
+				state.setDeckTurnedOver(false);
+			}
+			state.setFaceUp(deck.getFaceUp());
+			setCardEffect(deck.getFaceUp().applyCardEffect());
+		}
+		else if (effect.equals(draw2))
 		{
 			currentPlayer.drawCardFromDeck();
 			currentPlayer.drawCardFromDeck();
+			
+			setCardEffect("NONE");
+			state.setNextPlayer(getNextPlayer());
+			state.setPlayerHand(currentPlayer.getHand());
+			if (deck.isEmpty())
+			{
+				deck.shuffle();
+				state.setDeckTurnedOver(true);
+			}
+			else
+			{
+				state.setDeckTurnedOver(false);
+			}
+			
+			state.setFaceUp(deck.getFaceUp());
 		}
-		//add four cards to the player's hand and move to the next player
 		else if (effect.equals(draw4))
 		{
 			currentPlayer.drawCardFromDeck();
 			currentPlayer.drawCardFromDeck();
 			currentPlayer.drawCardFromDeck();
 			currentPlayer.drawCardFromDeck();
-		}
-		//set the wild game play color to user's chosen color
-		else if (move.equals(setColor))
-		{
 			
-			setWildPlayColor(data.getColor());
-			
-		}
-		//play the card and throw an error if it's unplayable
-		else if (move.equals(playCard))
-		{
-			//TO DO: check if anything in hand can be played
-			//CHECK FOR OTHER CARDS THAT CAN BE PLAYED IF CARD IS DRAW4
-			try
+			setCardEffect("NONE");
+			state.setNextPlayer(getNextPlayer());
+			state.setPlayerHand(currentPlayer.getHand());
+			if (deck.isEmpty())
 			{
-				currentPlayer.playCard(data.getCard());
-				setCardEffect(data.getCard().applyCardEffect()); //card effects include draw4, draw2, skip, reverse
-				//if the card is a wild card, set flag for player to set the color
-				if (data.getCard().toString().equals("WILD_4") || data.getCard().toString().equals(wild))
+				deck.shuffle();
+				state.setDeckTurnedOver(true);
+			}
+			else
+			{
+				state.setDeckTurnedOver(false);
+			}
+			
+			state.setFaceUp(deck.getFaceUp());
+			
+		}
+		
+		else if (data.getAction().equals(drawCard))
+		{
+			for (int i = 0; i < currentPlayer.getHand().getNumCards(); i++)
+			{
+				if (deck.getFaceUp().matchCard(currentPlayer.getHand().getCards().get(i)))
 				{
-					state.setColorTrue();
+					throw new IllegalMoveException("Illegal Draw: Card(s) in hand can be played.");
 				}
 			}
-			catch(IllegalMoveException e)
+			Card c = currentPlayer.drawCardFromDeck();
+			
+			currentPlayer.playCard(c);
+			state.setPlayerHand(currentPlayer.getHand());
+			state.setNextPlayer(getNextPlayer());
+			if (deck.isEmpty())
 			{
-				throw e;
+				deck.shuffle();
+				state.setDeckTurnedOver(true);
+			}
+			else
+			{
+				state.setDeckTurnedOver(false);
 			}
 			
+			state.setFaceUp(deck.getFaceUp());
 			
 		}
-		//draw a face down card from the deck
-		else if (move.equals(drawCard))
+		else if (data.getAction().equals(playCard))
 		{
-			currentPlayer.drawCardFromDeck();
+			
+			if (data.getCard().toString().equals("WILD_4"))
+			{
+				for (int i = 0; i < currentPlayer.getHand().getNumCards(); i++)
+				{
+					if (deck.getFaceUp().matchCard(currentPlayer.getHand().getCards().get(i)) && (!data.getCard().toString().equals("WILD_4"))) //&& (!deck.getFaceUp().toString().equals("WILD")) ))
+					{
+						throw new IllegalMoveException("Cannot Play Draw 4: Other card(s) can be played.");
+					}
+				}
+			}
+			if (data.getCard().toString().equals(wild) || data.getCard().toString().equals("WILD_4"))
+			{
+				currentPlayer.playCard(data.getCard());
+				state.setColorTrue();
+				state.setPlayerHand(currentPlayer.getHand());
+				state.setNextPlayer(playerIndex);
+
+
+			}
+			else
+			{
+				currentPlayer.playCard(data.getCard());
+				state.setColorFalse();
+				state.setPlayerHand(currentPlayer.getHand());
+				state.setNextPlayer(getNextPlayer());
+				//setCardEffect(data.getCard().applyCardEffect());
+				
+			}
+			
+			//play card
+			
+			if (deck.isEmpty())
+			{
+				deck.shuffle();
+				state.setDeckTurnedOver(true);
+			}
+			else
+			{
+				state.setDeckTurnedOver(false);
+			}
+			
+			state.setFaceUp(deck.getFaceUp());
+			
+			
 		}
-		
-		//put new hand in state
-		state.setPlayerHand(currentPlayer.getHand());
-		
-		//if the deck is empty, flip it and shuffle, tell UI that it has been flipped
-		if (deck.isEmpty() == true)
-		{
-			deck.shuffle();
-			state.setDeckTurnedOver(true);
-		}
-		else
-		{
-			state.setDeckTurnedOver(false);
-		}
-		
-		state.setNextPlayer(getNextPlayer());
-		
-		//set face up card
-		state.setFaceUp(deck.getFaceUp());
 		
 		if (checkForWinner() == true)
 		{
@@ -150,7 +221,7 @@ public class Game implements UnoInterface
 	}
 	
 	/*This gets the index of the next player for the state*/
-	public int getNextPlayer()
+	private int getNextPlayer()
 	{
 		if (effect.equals("REVERSE"))
 		{
@@ -174,7 +245,7 @@ public class Game implements UnoInterface
 	/*Set the new play color when wild card has been played*/
 	public Boolean setWildPlayColor(String color)
 	{
-		if (color.equals("GREEN") || color.equals("BLUE") || color.equals("RED") || color.equals("YELLOW"))
+		if (color.equals("GREEN") || color.equals("BLUE") || color.equals("RED") || color.equals("YELLOW") || color.equals("NONE"))
 		{
 			playColor = color;
 			return true;
@@ -188,7 +259,7 @@ public class Game implements UnoInterface
 		return playColor;
 	}
 	/*Effects include: NONE, DRAW2, WILD, WILD DRAW 4, SKIP, REVERSE*/
-	private void setCardEffect(String effect)
+	public void setCardEffect(String effect)
 	{
 		this.effect = effect;
 	}
@@ -262,15 +333,11 @@ public class Game implements UnoInterface
 	
 
 	
-	public ArrayList<Player> getPlayers()
-	{
-		return players;
-	}
-	
-	public Deck getDeck()
-	{
-		return deck;
-	}
+	/*
+	 * private ArrayList<Player> getPlayers() { return players; }
+	 * 
+	 * private Deck getDeck() { return deck; }
+	 */
 
 	
 	

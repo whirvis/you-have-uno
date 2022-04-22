@@ -23,7 +23,7 @@ public class Player
 	public void playCard(Card c) throws IllegalMoveException
 	{
 		
-		if (deck.getFaceUp().matchCard(c) == true && hand.getCards().contains(c))
+		if (deck.getFaceUp().matchCard(c) == true && (hand.getCards().contains(c)))
 		{
 			hand.discard(c);
 		}
@@ -34,9 +34,17 @@ public class Player
 		
 	}
 	
-	public void drawCardFromDeck()
+	public Card drawCardFromDeck() 
 	{
-		deck.addToHand(this);
+		Card c = deck.getTopCard();
+		try {
+			deck.addToHand(this);
+		} catch (IllegalMoveException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return c;
+		
 	}
 	
 	public Hand getHand()

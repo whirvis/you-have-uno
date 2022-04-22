@@ -12,7 +12,7 @@ class WildCard extends Card{
 	@Override
 	public Boolean matchCard(Card card) {
 		
-		if (card.getValue().equals(this.value) || card.getColor().equals(game.getWildPlayColor()))
+		if (card.getColor().equals(game.getWildPlayColor()) || card.toString().equals("WILD") || card.toString().equals("WILD_4"))
 		{
 			return true;
 		}

@@ -17,14 +17,15 @@ public class Hand
 		score = 0;
 	}
 	
-	public void addCard(Card c) 
+	public void addCard(Card c) throws IllegalMoveException
 	{
-		
+		if (cards.size() > 15)
+		{
+			throw new IllegalMoveException("hand is full");
+		}
 		cards.add(c);
 		score += c.getScoreValue();
-			
-		
-		
+
 	}
 	
 	
@@ -44,17 +45,17 @@ public class Hand
 		
 	}
 	
-	public Boolean discard(Card c)
+	public void discard(Card c)
 	{
-		if (cards.contains(c))
-		{
+		//if (cards.contains(c))
+		//{
 			removeCard(c);
 			playDeck.discard(c);
-			return true;
+			//return true;
 			
-		}
+		//}
 		
-		return false;
+		//return false;
 		
 		
 	}

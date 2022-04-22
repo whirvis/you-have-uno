@@ -36,7 +36,7 @@ public class State
 	{
 		nextPlayerIndex = p;
 	}
-	/*setting this flag means the game has been won*/
+	/*setting this flag to true means the game has been won*/
 	public void setGameOver()
 	{
 		gameOver = true;
@@ -54,7 +54,7 @@ public class State
 		playerSetWildColor = true;
 	}
 	
-	/*if deck has been used up, shuffle and reuse*/
+	/*if deck has been used up and shuffled, update UI*/
 	public void setDeckTurnedOver(Boolean b)
 	{
 		deckTurnedOver = b;

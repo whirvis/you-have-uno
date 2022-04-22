@@ -114,7 +114,9 @@ public class Deck
 
 		}
 		
+		
 		//Collections.shuffle(playDeck);
+		flipCard();
 		
 	}
 	
@@ -124,7 +126,12 @@ public class Deck
 		{
 			for (int j = 0; j < numHands; j++)
 			{
-				hands.get(j).addCard(playDeck.get(0));
+				try {
+					hands.get(j).addCard(playDeck.get(0));
+				} catch (IllegalMoveException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				playDeck.remove(0);
 			
 				
@@ -138,7 +145,7 @@ public class Deck
 		Card c = playDeck.get(0);
 		playDeck.remove(c);
 		discard(c);
-		faceUp = c;
+		game.setCardEffect(c.applyCardEffect());
 	}
 	
 	public void discard(Card c)
@@ -146,6 +153,7 @@ public class Deck
 		
 		discards.add(c);
 		faceUp = c;
+		game.setCardEffect(c.applyCardEffect());
 		
 		
 	}
@@ -155,16 +163,25 @@ public class Deck
 		playDeck.remove(c);
 	}
 	
-	public void addToHand(Player p)
+	public void addToHand(Player p) throws IllegalMoveException
 	{
-		if (isEmpty())
+		if (this.isEmpty() == true)
 		{
 			shuffle();
 			
 		}
-		p.getHand().addCard(getTopCard());
-		playDeck.remove(getTopCard());
-		flipCard();
+
+		Card c = getTopCard();
+		try {
+			p.getHand().addCard(c);
+		} catch (IllegalMoveException e) {
+			// TODO Auto-generated catch block
+			throw e;
+		}
+		removeCard(c);
+		//flipCard();
+		
+		
 	
 	}
 	

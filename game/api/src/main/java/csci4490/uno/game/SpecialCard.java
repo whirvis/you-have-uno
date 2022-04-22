@@ -11,7 +11,7 @@ abstract class SpecialCard extends Card{
 	@Override
 	public Boolean matchCard(Card card) {
 
-		if (card.getColor() == "NONE" || card.getColor().equals(this.getColor()) || card.getValue() == this.getValue())
+		if (card.getColor().equals(this.getColor()) || card.getValue() == this.getValue() || card.toString().equals("WILD") || card.toString().equals("WILD_4"))
 		{
 			return true;
 		}

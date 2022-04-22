@@ -24,7 +24,12 @@ class HandTest {
 		
 		Hand h = new Hand(deck);
 		int hand_size = h.getNumCards();
-		h.addCard(red1);
+		try {
+			h.addCard(red1);
+		} catch (IllegalMoveException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		int hand_size_added = h.getNumCards();
 		
 		assertTrue(hand_size == 0 && hand_size_added == 1);
@@ -35,7 +40,12 @@ class HandTest {
 		
 		Hand h = new Hand(deck);
 		
-		h.addCard(red1);
+		try {
+			h.addCard(red1);
+		} catch (IllegalMoveException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		int hand_size_added = h.getNumCards();
 		h.removeCard(red1);
 		int hand_size_removed = h.getNumCards();
@@ -48,7 +58,12 @@ class HandTest {
 		
 		Hand h = new Hand(deck);
 		
-		h.addCard(red1);
+		try {
+			h.addCard(red1);
+		} catch (IllegalMoveException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		int hand_size_added = h.getNumCards();
 		h.discard(red1);
 		int hand_size_removed = h.getNumCards();
@@ -58,10 +73,30 @@ class HandTest {
 	@Test
 	void testGetScore() {
 		Hand h = new Hand(deck);
-		h.addCard(red1);
-		h.addCard(blue0);
-		h.addCard(wildCard);
-		h.addCard(blue1);
+		try {
+			h.addCard(red1);
+		} catch (IllegalMoveException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			h.addCard(blue0);
+		} catch (IllegalMoveException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			h.addCard(wildCard);
+		} catch (IllegalMoveException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			h.addCard(blue1);
+		} catch (IllegalMoveException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		int score = h.getScore();
 		assertTrue(score == 68);
@@ -72,10 +107,30 @@ class HandTest {
 		Hand h = new Hand(deck);
 		
 		int empty = h.getNumCards();
-		h.addCard(red1);
-		h.addCard(blue0);
-		h.addCard(wildCard);
-		h.addCard(blue1);
+		try {
+			h.addCard(red1);
+		} catch (IllegalMoveException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			h.addCard(blue0);
+		} catch (IllegalMoveException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			h.addCard(wildCard);
+		} catch (IllegalMoveException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			h.addCard(blue1);
+		} catch (IllegalMoveException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		int numCards = h.getNumCards();
 		assertTrue(empty == 0 && numCards == 4);
