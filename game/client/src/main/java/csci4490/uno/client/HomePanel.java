@@ -3,15 +3,17 @@
  * Home Page Panel
  */
 
-package csci4490.uno.client;
+package unogame;
 
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 import unogame.LoginPanel;
 
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 
 import java.awt.*;
@@ -23,10 +25,8 @@ import java.util.Set;
 
 import javax.imageio.ImageIO;
 
-public class HomePanel extends JPanel implements ComponentListener
+public class HomePanel extends JPanel
 {
-	
-	// base_element_size * (current_window_size / base_window_size)
 	
 	
 	private MainFrame frame;
@@ -39,15 +39,10 @@ public class HomePanel extends JPanel implements ComponentListener
 	private JLabel loginCard2;
 	
 	
-	
 	public HomePanel() 
 	{
-		
-		this.addComponentListener(this);
-		
+	
 		frame = new MainFrame();
-		
-		oldSize = frame.setSize(frame.getWidth(), frame.getHeight());
 		
 		setBackground(new Color(135, 206, 250));
 		setLayout(null);
@@ -58,10 +53,7 @@ public class HomePanel extends JPanel implements ComponentListener
 		loginButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				if(loginButton.isEnabled())
-				{
-					
-				}
+				frame.changeToLP(e);
 				
 			}
 		});
@@ -75,11 +67,7 @@ public class HomePanel extends JPanel implements ComponentListener
 		accButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				if(loginButton.isEnabled())
-				{
-					
-				}
-				
+				frame.changeToCAP(e);
 			}
 		});
 		accButton.setFont(new Font("Dialog", Font.PLAIN, 13));
@@ -114,64 +102,6 @@ public class HomePanel extends JPanel implements ComponentListener
 	}
 
 	
-	public void setComponentSize()
-	{
-	// Changing size of elements
-		
-		// Login Button
-		
-		Dimension loginSize = loginButton.getSize();
-		Dimension newSize = frame.getSize();
-		
-		loginSize.setSize(0, oldSize.getHeight()/newSize.getHeight());
-		
-		// Create Account Button
-		
-		Dimension accSize = accButton.getSize();
-		
-		accSize.setSize(0, oldSize.getHeight() / newSize.getHeight());
-		
-		// Lables
-		
-		Dimension topSize = topLabel1.getSize();
-		Dimension lowSize = lowLabel1.getSize();
-		
-		topSize.setSize(0, oldSize.getHeight() / newSize.getHeight());
-		lowSize.setSize(0, oldSize.getHeight() / newSize.getHeight());
-		
-		// Card Images
-		
-		Dimension lcardSize = loginCard1.getSize();
-		Dimension rcardSize = loginCard2.getSize();
-		
-		lcardSize.setSize(0, oldSize.getHeight() / newSize.getHeight());
-		rcardSize.setSize(0, oldSize.getHeight() / newSize.getHeight());
-	}
 	
-	@Override
-	public void componentResized(ComponentEvent e) {
-		// TODO Auto-generated method stub
-		
-		this.setComponentSize();
-		e.get
-		
-	}
-
-	@Override
-	public void componentMoved(ComponentEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void componentShown(ComponentEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void componentHidden(ComponentEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+	
 }

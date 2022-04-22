@@ -3,11 +3,12 @@
  * Create Account Panel
  */
 
-package csci4490.uno.client;
+package unogame;
 
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -18,11 +19,11 @@ import java.util.Set;
 
 import javax.imageio.ImageIO;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.JEditorPane;
 
 public class CreateAccPanel extends JPanel
 {
-	private JTextField caccLabel;
 	private JLabel usrnmLabel;
 	private JLabel pswdLabel;
 	private JLabel verifyLabel;
@@ -32,29 +33,29 @@ public class CreateAccPanel extends JPanel
 	private JButton submitButton;
 	private JLabel errorLabel;
 	private JButton returnButton;
+	private MainFrame frame;
 	
 	public CreateAccPanel() {
+		
+		frame = new MainFrame();
+		
 		setBackground(new Color(135, 206, 250));
 		setLayout(null);
 		
-		caccLabel = new JTextField();
-		caccLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		caccLabel.setText("Enter a username and password below");
-		caccLabel.setBounds(101, 10, 245, 19);
-		add(caccLabel);
-		caccLabel.setColumns(10);
-		
 		usrnmLabel = new JLabel("Username:");
+		usrnmLabel.setForeground(Color.WHITE);
 		usrnmLabel.setFont(new Font("Tahoma", Font.BOLD, 16));
 		usrnmLabel.setBounds(31, 91, 99, 13);
 		add(usrnmLabel);
 		
 		pswdLabel = new JLabel("Password:");
+		pswdLabel.setForeground(Color.WHITE);
 		pswdLabel.setFont(new Font("Tahoma", Font.BOLD, 16));
 		pswdLabel.setBounds(31, 125, 99, 13);
 		add(pswdLabel);
 		
 		verifyLabel = new JLabel("Verify Password:");
+		verifyLabel.setForeground(Color.WHITE);
 		verifyLabel.setFont(new Font("Tahoma", Font.BOLD, 16));
 		verifyLabel.setBounds(31, 162, 144, 13);
 		add(verifyLabel);
@@ -74,6 +75,9 @@ public class CreateAccPanel extends JPanel
 		submitButton = new JButton("Submit");
 		submitButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
+				frame.changeToLP(e);
+				
 			}
 		});
 		submitButton.setFont(new Font("Tahoma", Font.PLAIN, 12));
@@ -88,11 +92,19 @@ public class CreateAccPanel extends JPanel
 		returnButton = new JButton("Return");
 		returnButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
+				frame.changeToHP(e);
+				
 			}
 		});
 		returnButton.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		returnButton.setBounds(31, 247, 120, 43);
 		add(returnButton);
+		
+		JLabel caccLabel = new JLabel("Enter a username and password below");
+		caccLabel.setFont(new Font("Tahoma", Font.BOLD, 16));
+		caccLabel.setForeground(Color.WHITE);
+		caccLabel.setBounds(52, 25, 328, 28);
+		add(caccLabel);
 	}
-
 }

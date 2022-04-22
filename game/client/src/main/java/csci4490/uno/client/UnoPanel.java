@@ -1,4 +1,4 @@
-package csci4490.uno.client;
+package unogame;
 
 import javax.imageio.ImageIO;
 import javax.swing.Icon;

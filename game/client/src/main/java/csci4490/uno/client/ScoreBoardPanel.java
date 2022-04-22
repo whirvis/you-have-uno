@@ -3,13 +3,19 @@
  * Score Board Panel
  */
 
-package csci4490.uno.client;
+package unogame;
 
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+
 import java.awt.Color;
 import javax.swing.JLabel;
 import java.awt.Font;
+import java.awt.Window;
+
 import javax.swing.JButton;
+import javax.swing.JComponent;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -28,8 +34,12 @@ public class ScoreBoardPanel extends JPanel
 	private JLabel fourthNumCards;
 	private JButton playAgainButton;
 	private JButton exitGameButton;
+	private MainFrame frame;
 	
 	public ScoreBoardPanel() {
+		
+		frame = new MainFrame();
+		
 		setBackground(new Color(0, 0, 0));
 		setForeground(new Color(255, 255, 255));
 		setLayout(null);
@@ -97,6 +107,9 @@ public class ScoreBoardPanel extends JPanel
 		playAgainButton = new JButton("Play Again");
 		playAgainButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
+				frame.changeToHP(e);
+				
 			}
 		});
 		playAgainButton.setFont(new Font("Tahoma", Font.PLAIN, 12));
@@ -106,6 +119,11 @@ public class ScoreBoardPanel extends JPanel
 		exitGameButton = new JButton("Exit Game");
 		exitGameButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
+				JComponent comp = (JComponent) e.getSource();
+				Window win = SwingUtilities.getWindowAncestor(comp);
+				win.dispose();
+				
 			}
 		});
 		exitGameButton.setFont(new Font("Tahoma", Font.PLAIN, 12));

@@ -3,14 +3,20 @@
  * Join Game Panel
  */
 
-package csci4490.uno.client;
+package unogame;
 
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+
 import java.awt.Color;
 import javax.swing.JLabel;
 import java.awt.Font;
+import java.awt.Window;
+
 import javax.swing.JEditorPane;
 import javax.swing.JButton;
+import javax.swing.JComponent;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -23,8 +29,12 @@ public class JoinGamePanel extends JPanel
 	private JLabel errorLabel;
 	private JButton returnButton;
 	private JButton connectButton;
+	private MainFrame frame;
 	
 	public JoinGamePanel() {
+		
+		frame = new MainFrame();
+		
 		setBackground(new Color(135, 206, 250));
 		setLayout(null);
 		
@@ -52,6 +62,9 @@ public class JoinGamePanel extends JPanel
 		returnButton = new JButton("Return");
 		returnButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
+				frame.changeToGOP(e);
+				
 			}
 		});
 		returnButton.setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -61,6 +74,9 @@ public class JoinGamePanel extends JPanel
 		connectButton = new JButton("Connect");
 		connectButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
+				frame.changeToUP(e);
+				
 			}
 		});
 		connectButton.setFont(new Font("Tahoma", Font.PLAIN, 14));

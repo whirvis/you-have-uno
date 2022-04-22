@@ -3,13 +3,19 @@
  * Game Code Panel
  */
 
-package csci4490.uno.client;
+package unogame;
 
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+
 import java.awt.Color;
 import javax.swing.JLabel;
 import java.awt.Font;
+import java.awt.Window;
+
 import javax.swing.JButton;
+import javax.swing.JComponent;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -19,8 +25,12 @@ public class GameCodePanel extends JPanel
 	private JLabel numConnected;
 	private JButton returnButton;
 	private JButton startButton;
+	private MainFrame frame;
 	
 	public GameCodePanel() {
+		
+		frame = new MainFrame();
+		
 		setBackground(new Color(135, 206, 250));
 		setLayout(null);
 		
@@ -39,19 +49,25 @@ public class GameCodePanel extends JPanel
 		returnButton = new JButton("Return");
 		returnButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
+				frame.changeToGOP(e);
+				
 			}
 		});
-		returnButton.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		returnButton.setBounds(55, 203, 98, 33);
+		returnButton.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		returnButton.setBounds(55, 184, 120, 52);
 		add(returnButton);
 		
 		startButton = new JButton("Start Game");
 		startButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
+				frame.changeToUP(e);
+				
 			}
 		});
-		startButton.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		startButton.setBounds(289, 203, 108, 33);
+		startButton.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		startButton.setBounds(265, 184, 132, 52);
 		add(startButton);
 	}
 

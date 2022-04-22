@@ -1,8 +1,9 @@
-package csci4490.uno.client;
+package unogame;
 
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -15,6 +16,7 @@ import javax.imageio.ImageIO;
 import javax.swing.UIManager;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.JEditorPane;
 
 public class LoginPanel extends JPanel
@@ -27,8 +29,12 @@ public class LoginPanel extends JPanel
 	private JLabel inputError;
 	private JButton loginButton;
 	private JLabel loginLabel;
+	private MainFrame frame;
 	
 	public LoginPanel() {
+		
+		frame = new MainFrame();
+		
 		setBackground(new Color(135, 206, 250));
 		setLayout(null);
 		
@@ -48,6 +54,9 @@ public class LoginPanel extends JPanel
 		returnHome.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		returnHome.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
+				frame.changeToHP(e);
+				
 			}
 		});
 		returnHome.setBounds(34, 248, 132, 42);
@@ -70,6 +79,9 @@ public class LoginPanel extends JPanel
 		loginButton.setFont(new Font("Tahoma", Font.BOLD, 10));
 		loginButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
+				frame.changeToGOP(e);
+				
 			}
 		});
 		loginButton.setBounds(282, 248, 132, 42);

@@ -3,93 +3,186 @@
  * Home Page Frame
  */
 
-package csci4490.uno.client;
+package unogame;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Window;
+import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 public class MainFrame 
 {
-	int width;
-	int height;
+	private static HomePanel hp;
+	private static LoginPanel lp;
+	private static CreateAccPanel ca;
+	private static GameOptionPanel go;
+	private static JoinGamePanel jg;
+	private static GameCodePanel gc;
+	private static UnoPanel up;
 	
-	public MainFrame()
-	{
-		int width = 525;
-		int height = 400;
-	}
+	// Main - Home Page
 	
 	public static void main(String[] args) 
 	{
 		
-		JFrame frame = new JFrame("You Have Uno!");
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setPreferredSize(new Dimension(525,400));
+		JFrame homeframe = new JFrame("You Have Uno! - Home");
+		homeframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		homeframe.setPreferredSize(new Dimension(525,400));
 		
-		// Panels
+		hp = new HomePanel();
+		homeframe.getContentPane().add(hp);
 		
-		CreateAccPanel caccpanel = new CreateAccPanel();
-		frame.getContentPane().add(caccpanel);
+		homeframe.pack();
+		homeframe.setVisible(true);
 		
-		GameCodePanel gcpanel = new GameCodePanel();
-		frame.getContentPane().add(gcpanel);
-		
-		GameOptionPanel gopanel = new GameOptionPanel();
-		frame.getContentPane().add(gopanel);
-		
-	//	HomePanel hpanel = new HomePanel();
-	//	frame.getContentPane().add(hpanel);
-		
-		JoinGamePanel jgpanel = new JoinGamePanel();
-		frame.getContentPane().add(jgpanel);
-		
-		LoginPanel lgpanel = new LoginPanel();
-		frame.getContentPane().add(lgpanel);
-		
-		HomePanel hpanel = new HomePanel();
-		frame.getContentPane().add(hpanel);
-		
-		frame.pack();
-		frame.setVisible(true);
-		
-	}
-
-	public int getWidth()
-	{
-		return width;
 	}
 	
-	public int getHeight()
+	// Home Page
+	
+	public void changeToHP(ActionEvent e) 
 	{
-		return height;
+		
+		JComponent comp = (JComponent) e.getSource();
+		Window win = SwingUtilities.getWindowAncestor(comp);
+		win.dispose();
+		
+		JFrame homeframe = new JFrame("You Have Uno! - Home");
+		homeframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		homeframe.setPreferredSize(new Dimension(525,400));
+		
+		hp = new HomePanel();
+		homeframe.getContentPane().add(hp);
+		
+		homeframe.pack();
+		homeframe.setVisible(true);
+		
 	}
 	
-	public void setWidth(int width)
+	// Login
+	
+	public void changeToLP(ActionEvent e)
 	{
-		this.width = width;
+		JComponent comp = (JComponent) e.getSource();
+		Window win = SwingUtilities.getWindowAncestor(comp);
+		win.dispose();
+		
+		JFrame loginframe = new JFrame("You Have Uno! - Login");
+		loginframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		loginframe.setPreferredSize(new Dimension(525,400));
+		
+		lp = new LoginPanel();
+		loginframe.getContentPane().add(lp);
+		
+		loginframe.pack();
+		loginframe.setVisible(true);
+		
 	}
 	
-	public void setHeight(int height)
+	// Create Account
+	
+	public void changeToCAP(ActionEvent e)
 	{
-		this.height = height;
+		JComponent comp = (JComponent) e.getSource();
+		Window win = SwingUtilities.getWindowAncestor(comp);
+		win.dispose();
+		
+		JFrame caccframe = new JFrame("You Have Uno! - Create Account");
+		caccframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		caccframe.setPreferredSize(new Dimension(525,400));
+		
+		ca = new CreateAccPanel();
+		caccframe.getContentPane().add(ca);
+		
+		caccframe.pack();
+		caccframe.setVisible(true);
+		
 	}
 	
-	public Dimension setSize(int width, int height) {
-		int oldWidth = this.width;
-		int oldHeight = this.height;
-		this.setWidth(width);
-		this.setHeight(height);
-		return new Dimension(oldWidth, oldHeight);
+	// User selects to host or join game
+	
+	public void changeToGOP(ActionEvent e)
+	{
+		JComponent comp = (JComponent) e.getSource();
+		Window win = SwingUtilities.getWindowAncestor(comp);
+		win.dispose();
+		
+		JFrame gopframe = new JFrame("You Have Uno! - Game Option");
+		gopframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		gopframe.setPreferredSize(new Dimension(525,400));
+		
+		go = new GameOptionPanel();
+		gopframe.getContentPane().add(go);
+		
+		gopframe.pack();
+		gopframe.setVisible(true);
+		
 	}
 	
-	public Dimension getSize()
+	// Join Game
+	
+	public void changeToJGP(ActionEvent e)
 	{
-		return new Dimension(getWidth(), getHeight());
+		JComponent comp = (JComponent) e.getSource();
+		Window win = SwingUtilities.getWindowAncestor(comp);
+		win.dispose();
+		
+		JFrame jgpframe = new JFrame("You Have Uno! - Join Game");
+		jgpframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		jgpframe.setPreferredSize(new Dimension(525,400));
+		
+		jg = new JoinGamePanel();
+		jgpframe.getContentPane().add(jg);
+		
+		jgpframe.pack();
+		jgpframe.setVisible(true);
+		
+	}
+	
+	// Host will have generated game code
+	
+	public void changeToGCP(ActionEvent e)
+	{
+		JComponent comp = (JComponent) e.getSource();
+		Window win = SwingUtilities.getWindowAncestor(comp);
+		win.dispose();
+		
+		JFrame gcpframe = new JFrame("You Have Uno! - Host Game");
+		gcpframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		gcpframe.setPreferredSize(new Dimension(525,400));
+		
+		gc = new GameCodePanel();
+		gcpframe.getContentPane().add(gc);
+		
+		gcpframe.pack();
+		gcpframe.setVisible(true);
+		
+	}
+	
+	// Uno Game
+	
+	public void changeToUP(ActionEvent e)
+	{
+		JComponent comp = (JComponent) e.getSource();
+		Window win = SwingUtilities.getWindowAncestor(comp);
+		win.dispose();
+		
+		JFrame upframe = new JFrame("You Have Uno!");
+		upframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		upframe.setPreferredSize(new Dimension(525,400));
+		
+		up = new UnoPanel();
+		upframe.getContentPane().add(up);
+		
+		upframe.pack();
+		upframe.setVisible(true);
+		
 	}
 	
 }
