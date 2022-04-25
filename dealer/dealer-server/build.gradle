@@ -1,5 +1,5 @@
 dependencies {
-    implementation project(':dealer:api')
+    implementation project(':dealer:dealer-api')
 
     implementation files('lib/mysql-connector-java-8.0.28.jar')
 

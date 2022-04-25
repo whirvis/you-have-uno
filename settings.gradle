@@ -2,10 +2,10 @@ rootProject.name = 'you-have-uno'
 
 include ':commons'
 
-include ':dealer:api'
-include ':dealer:client'
-include ':dealer:server'
+include ':dealer:dealer-api'
+include ':dealer:dealer-client'
+include ':dealer:dealer-server'
 
-include ':game:api'
-include ':game:client'
-include ':game:server'
+include ':game:game-api'
+include ':game:game-client'
+include ':game:game-server'
