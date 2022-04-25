@@ -20,6 +20,7 @@ public class HomePanel extends JPanel {
 
     public final JButton loginButton;
     public final JButton createAccountButton;
+    public final JButton playButton;
 
     public HomePanel() {
         this.setLayout(null);
@@ -54,6 +55,11 @@ public class HomePanel extends JPanel {
         createAccountButton.setFont(new Font("Dialog", Font.PLAIN, 13));
         createAccountButton.setBounds(176, 264, 161, 48);
         this.add(createAccountButton);
+
+        this.playButton = new JButton("Play");
+        playButton.setFont(new Font("Tahoma", Font.PLAIN, 16));
+        playButton.setBounds(350, 230, 100, 48);
+        this.add(playButton);
     }
 
 }

@@ -16,13 +16,17 @@ public class HomeState extends UnoGameState<HomePanel> {
     }
 
     @Override
-    protected void initState() throws IOException {
+    protected void initState() {
         panel.loginButton.addActionListener((event -> {
             game.enterState(game.loginStateId);
         }));
 
         panel.createAccountButton.addActionListener(event -> {
             game.enterState(game.createAccountStateId);
+        });
+
+        panel.playButton.addActionListener(event -> {
+            game.enterState(game.gameOptionsId);
         });
     }
 

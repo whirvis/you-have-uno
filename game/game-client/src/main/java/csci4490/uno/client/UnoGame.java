@@ -2,6 +2,7 @@ package csci4490.uno.client;
 
 import com.google.gson.JsonElement;
 import csci4490.uno.client.state.CreateAccountState;
+import csci4490.uno.client.state.GameOptionState;
 import csci4490.uno.client.state.HomeState;
 import csci4490.uno.client.state.LoginState;
 import csci4490.uno.commons.UnoJson;
@@ -97,6 +98,7 @@ public class UnoGame extends Thread {
     public final @NotNull StateId homeStateId;
     public final @NotNull StateId loginStateId;
     public final @NotNull StateId createAccountStateId;
+    public final @NotNull StateId gameOptionsId;
 
     private UnoGameState<?> currentState;
     private long lastUpdate;
@@ -128,6 +130,7 @@ public class UnoGame extends Thread {
         this.loginStateId = this.registerState(new LoginState(this));
         this.createAccountStateId =
                 this.registerState(new CreateAccountState(this));
+        this.gameOptionsId = this.registerState(new GameOptionState(this));
     }
 
     /**

@@ -16,6 +16,7 @@ public class GameOptionPanel extends JPanel {
 
     public final JButton joinGameButton;
     public final JButton hostGameButton;
+    public final JButton returnButton;
 
     public GameOptionPanel() {
         this.setLayout(null);
@@ -30,13 +31,19 @@ public class GameOptionPanel extends JPanel {
 
         this.joinGameButton = new JButton("Join Game");
         joinGameButton.setFont(new Font("Tahoma", Font.PLAIN, 12));
-        joinGameButton.setBounds(50, 169, 128, 53);
+        joinGameButton.setBounds(50, 170, 135, 50);
         this.add(joinGameButton);
 
         this.hostGameButton = new JButton("Host Game");
         hostGameButton.setFont(new Font("Tahoma", Font.PLAIN, 12));
-        hostGameButton.setBounds(267, 169, 135, 53);
+        hostGameButton.setBounds(267, 170, 135, 50);
         this.add(hostGameButton);
+
+
+        this.returnButton = new JButton("Return");
+        returnButton.setFont(new Font("Tahoma", Font.PLAIN, 12));
+        returnButton.setBounds(50, 250, 135, 50);
+        this.add(returnButton);
     }
 
 }
