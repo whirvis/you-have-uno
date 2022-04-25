@@ -1,1 +1,3 @@
-/* I'm a little teapot! */
+dependencies {
+    implementation project(':dealer:dealer-client')
+}

@@ -3,18 +3,40 @@ package csci4490.uno.client;
 import csci4490.uno.client.state.CreateAccountState;
 import csci4490.uno.client.state.HomeState;
 import csci4490.uno.client.state.LoginState;
+import csci4490.uno.dealer.UnoDealerClient;
+import csci4490.uno.dealer.UnoEndpoints;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.net.InetSocketAddress;
 import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
 public class UnoGame extends Thread {
+
+    private static @NotNull UnoDealerClient createDealerClient() {
+        InetSocketAddress official = UnoEndpoints.OFFICIAL;
+
+        String host = official.getAddress().getHostAddress();
+        int port = official.getPort();
+
+        String addressProperty = System.getProperty("dealer_address");
+        if (addressProperty != null) {
+            String[] split = addressProperty.split(":");
+            host = split[0];
+            if (split.length > 1) {
+                port = Integer.parseInt(split[1]);
+            }
+        }
+
+        InetSocketAddress address = new InetSocketAddress(host, port);
+        return new UnoDealerClient(address);
+    }
 
     public static final String GAME_TITLE = "You Have Uno!";
     public static final Color BG_COLOR = new Color(242, 0, 0);
@@ -23,6 +45,7 @@ public class UnoGame extends Thread {
     public final @NotNull StateId loginStateId;
     public final @NotNull StateId createAccountStateId;
 
+    private final UnoDealerClient dealerClient;
     private final JFrame frame;
     private final Map<StateId, UnoGameState<?>> states;
 
@@ -30,6 +53,7 @@ public class UnoGame extends Thread {
     private long lastUpdate;
 
     private UnoGame() {
+        this.dealerClient = createDealerClient();
         this.frame = new JFrame(GAME_TITLE);
 
         frame.setBackground(BG_COLOR);
@@ -43,6 +67,14 @@ public class UnoGame extends Thread {
         this.loginStateId = this.registerState(new LoginState(this));
         this.createAccountStateId =
                 this.registerState(new CreateAccountState(this));
+    }
+
+    /**
+     * @return the UNO dealer client used by this game to contact the UNO
+     * dealer server.
+     */
+    public @NotNull UnoDealerClient getDealerClient() {
+        return this.dealerClient;
     }
 
     private void handleGameError(Throwable cause) {
