@@ -15,7 +15,7 @@ import java.util.UUID;
 public class StaticUnoLogin implements UnoLogin {
 
     @SerializedName("account")
-    private final @NotNull UnoAccount account;
+    private final @NotNull StaticUnoAccount account;
 
     @SerializedName("address")
     private final @NotNull InetAddress address;
