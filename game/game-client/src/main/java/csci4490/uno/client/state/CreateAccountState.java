@@ -54,7 +54,13 @@ public class CreateAccountState extends UnoGameState<CreateAccountPanel> {
             char[] cVerify = panel.verifyField.getPassword();
             String password = new String(cPassword);
 
-            if (!Arrays.equals(cPassword, cVerify)) {
+            if (username.isEmpty()) {
+                responseLabel.setText("Username cannot be empty.");
+                return;
+            } else if (password.isEmpty()) {
+                responseLabel.setText("Password cannot be empty.");
+                return;
+            } else if (!Arrays.equals(cPassword, cVerify)) {
                 responseLabel.setText("Passwords must match.");
                 return;
             }
