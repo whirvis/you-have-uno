@@ -41,6 +41,7 @@ public class LoginState extends UnoGameState<LoginPanel> {
     protected void leaveState() {
         panel.usernamePane.setText("");
         panel.passwordField.setText("");
+        panel.responseLabel.setText("");
     }
 
     private void login(ScheduledJob job) {
@@ -80,8 +81,8 @@ public class LoginState extends UnoGameState<LoginPanel> {
         } catch (ConnectException e) {
             responseLabel.setText("Failed to reach server.");
         } catch (IOException e) {
+            responseLabel.setText("Server I/O error");
             e.printStackTrace();
-            responseLabel.setText(e.getMessage());
         }
     }
 

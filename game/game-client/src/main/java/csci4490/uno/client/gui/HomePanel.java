@@ -16,6 +16,7 @@ public class HomePanel extends JPanel {
 
     public final JLabel upperTitleLabel;
     public final JLabel lowerTitleLabel;
+    public final JLabel currentAccountLabel;
 
     public final JButton loginButton;
     public final JButton createAccountButton;
@@ -37,6 +38,12 @@ public class HomePanel extends JPanel {
         lowerTitleLabel.setForeground(SAFETY_YELLOW);
         lowerTitleLabel.setBounds(201, 110, 108, 55);
         this.add(lowerTitleLabel);
+
+        this.currentAccountLabel = new JLabel();
+        currentAccountLabel.setFont(new Font("Tahoma", Font.ITALIC, 16));
+        currentAccountLabel.setForeground(Color.BLACK);
+        currentAccountLabel.setBounds(15, 0, 10008, 55);
+        this.add(currentAccountLabel);
 
         this.loginButton = new JButton("Login");
         loginButton.setFont(new Font("Tahoma", Font.PLAIN, 17));

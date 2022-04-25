@@ -90,6 +90,7 @@ public class UnoGame extends Thread {
 
     private final UnoDealerClient dealerClient;
     private UnoLogin dealerLogin;
+    private boolean verifyingLogin;
 
     private final JFrame frame;
     private final Map<StateId, UnoGameState<?>> states;
@@ -105,9 +106,8 @@ public class UnoGame extends Thread {
         this.scheduler = new ThreadedScheduler();
 
         this.dealerClient = createDealerClient();
-        this.dealerLogin = loadLogin();
 
-        if (dealerLogin != null) {
+        if (LOGIN_FILE.exists()) {
             System.out.println("Located login file, verifying...");
             scheduler.schedule(this::verifyLoginFile, 30, Duration.ZERO,
                     Duration.ofSeconds(1));
@@ -245,10 +245,22 @@ public class UnoGame extends Thread {
         }
     }
 
+    public boolean isVerifyingLogin() {
+        return this.verifyingLogin;
+    }
+
     private void verifyLoginFile(ScheduledJob job) {
+        UnoLogin loginFile = loadLogin();
+        if (loginFile == null) {
+            job.cancel();
+            return;
+        }
+
+        this.verifyingLogin = true;
+
         LoginVerifyResponse loginVerifyResponse;
         try {
-            loginVerifyResponse = dealerClient.verifyLogin(dealerLogin);
+            loginVerifyResponse = dealerClient.verifyLogin(loginFile);
         } catch (IOException e) {
             System.err.println("Failed to get response...");
             return;
@@ -256,12 +268,18 @@ public class UnoGame extends Thread {
 
         if (loginVerifyResponse.verified) {
             System.out.println("Verified login!");
+            this.setLogin(loginFile);
         } else {
             System.err.println("Bad login file, wiping...");
             this.setLogin(null);
         }
 
+        this.verifyingLogin = false;
         job.cancel();
+    }
+
+    public @Nullable UnoLogin getLogin() {
+        return this.dealerLogin;
     }
 
     public void setLogin(@Nullable UnoLogin login) {

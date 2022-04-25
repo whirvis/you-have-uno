@@ -23,15 +23,15 @@ public class CreateAccountState extends UnoGameState<CreateAccountPanel> {
 
     @Override
     protected void initState() {
+        panel.returnButton.addActionListener(event -> {
+            game.enterState(game.homeStateId);
+        });
         panel.submitButton.addActionListener(event -> {
             if (createAccountJob != null && !createAccountJob.isFinished()) {
                 createAccountJob.cancel();
             }
             this.createAccountJob =
                     this.getScheduler().schedule(this::createAccount);
-        });
-        panel.returnButton.addActionListener(event -> {
-            game.enterState(game.homeStateId);
         });
     }
 
@@ -40,6 +40,7 @@ public class CreateAccountState extends UnoGameState<CreateAccountPanel> {
         panel.usernamePane.setText("");
         panel.passwordField.setText("");
         panel.verifyField.setText("");
+        panel.responseLabel.setText("");
     }
 
     private void createAccount() {
@@ -68,8 +69,8 @@ public class CreateAccountState extends UnoGameState<CreateAccountPanel> {
         } catch (ConnectException e) {
             responseLabel.setText("Failed to reach server.");
         } catch (IOException e) {
+            responseLabel.setText("Server I/O error");
             e.printStackTrace();
-            responseLabel.setText(e.getMessage());
         }
     }
 
