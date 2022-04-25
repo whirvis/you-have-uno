@@ -5,6 +5,7 @@ include ':commons'
 include ':dealer:dealer-api'
 include ':dealer:dealer-client'
 include ':dealer:dealer-server'
+include ':dealer:dealer-tavern'
 
 include ':game:game-api'
 include ':game:game-client'
