@@ -22,7 +22,7 @@ public class CreateAccountPanel extends JPanel {
 
     public final JLabel instructionLabel;
     public final JButton submitButton;
-    public final JLabel errorLabel;
+    public final JLabel responseLabel;
     public final JButton returnButton;
 
     public CreateAccountPanel() {
@@ -66,10 +66,10 @@ public class CreateAccountPanel extends JPanel {
         submitButton.setBounds(290, 247, 106, 43);
         this.add(submitButton);
 
-        this.errorLabel = new JLabel();
-        errorLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
-        errorLabel.setBounds(31, 193, 365, 28);
-        this.add(errorLabel);
+        this.responseLabel = new JLabel();
+        responseLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
+        responseLabel.setBounds(31, 193, 365, 28);
+        this.add(responseLabel);
 
         this.returnButton = new JButton("Return");
         returnButton.setFont(new Font("Tahoma", Font.PLAIN, 12));

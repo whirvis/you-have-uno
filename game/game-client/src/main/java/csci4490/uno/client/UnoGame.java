@@ -1,23 +1,44 @@
 package csci4490.uno.client;
 
+import com.google.gson.JsonElement;
 import csci4490.uno.client.state.CreateAccountState;
 import csci4490.uno.client.state.HomeState;
 import csci4490.uno.client.state.LoginState;
+import csci4490.uno.commons.UnoJson;
+import csci4490.uno.commons.scheduler.ScheduledJob;
+import csci4490.uno.commons.scheduler.Scheduler;
+import csci4490.uno.commons.scheduler.ThreadedScheduler;
+import csci4490.uno.dealer.StaticUnoLogin;
 import csci4490.uno.dealer.UnoDealerClient;
 import csci4490.uno.dealer.UnoEndpoints;
+import csci4490.uno.dealer.UnoLogin;
+import csci4490.uno.dealer.response.login.LoginVerifyResponse;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.net.InetSocketAddress;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
 public class UnoGame extends Thread {
+
+
+    private static final String CONFIG_DIR_PATH =
+            "./dealer/dealer-client/config";
+    private static final File CONFIG_DIR = new File(CONFIG_DIR_PATH);
+    private static final File LOGIN_FILE = new File(CONFIG_DIR, "login.json");
 
     private static @NotNull UnoDealerClient createDealerClient() {
         InetSocketAddress official = UnoEndpoints.OFFICIAL;
@@ -38,22 +59,60 @@ public class UnoGame extends Thread {
         return new UnoDealerClient(address);
     }
 
+    private static void saveLogin(UnoLogin login) {
+        if (!CONFIG_DIR.exists()) {
+            if (CONFIG_DIR.mkdirs()) {
+                return;
+            }
+        }
+
+        String json = UnoJson.GSON.toJson(login);
+        try (FileOutputStream out = new FileOutputStream(LOGIN_FILE)) {
+            out.write(json.getBytes(StandardCharsets.UTF_8));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static @Nullable UnoLogin loadLogin() {
+        try (FileInputStream in = new FileInputStream(LOGIN_FILE)) {
+            JsonElement json = UnoJson.fromJson(in);
+            return UnoJson.fromJson(json, StaticUnoLogin.class);
+        } catch (IOException e) {
+            return null;
+        }
+    }
+
     public static final String GAME_TITLE = "You Have Uno!";
-    public static final Color BG_COLOR = new Color(242, 0, 0);
+    public static final Color BG_COLOR = new Color(255, 127, 127);
+
+    private final Scheduler scheduler;
+
+    private final UnoDealerClient dealerClient;
+    private UnoLogin dealerLogin;
+
+    private final JFrame frame;
+    private final Map<StateId, UnoGameState<?>> states;
 
     public final @NotNull StateId homeStateId;
     public final @NotNull StateId loginStateId;
     public final @NotNull StateId createAccountStateId;
 
-    private final UnoDealerClient dealerClient;
-    private final JFrame frame;
-    private final Map<StateId, UnoGameState<?>> states;
-
     private UnoGameState<?> currentState;
     private long lastUpdate;
 
     private UnoGame() {
+        this.scheduler = new ThreadedScheduler();
+
         this.dealerClient = createDealerClient();
+        this.dealerLogin = loadLogin();
+
+        if (dealerLogin != null) {
+            System.out.println("Located login file, verifying...");
+            scheduler.schedule(this::verifyLoginFile, 30, Duration.ZERO,
+                    Duration.ofSeconds(1));
+        }
+
         this.frame = new JFrame(GAME_TITLE);
 
         frame.setBackground(BG_COLOR);
@@ -184,6 +243,34 @@ public class UnoGame extends Thread {
         } catch (Throwable cause) {
             this.handleGameError(cause);
         }
+    }
+
+    private void verifyLoginFile(ScheduledJob job) {
+        LoginVerifyResponse loginVerifyResponse;
+        try {
+            loginVerifyResponse = dealerClient.verifyLogin(dealerLogin);
+        } catch (IOException e) {
+            System.err.println("Failed to get response...");
+            return;
+        }
+
+        if (loginVerifyResponse.verified) {
+            System.out.println("Verified login!");
+        } else {
+            System.err.println("Bad login file, wiping...");
+            this.setLogin(null);
+        }
+
+        job.cancel();
+    }
+
+    public void setLogin(@Nullable UnoLogin login) {
+        if (login != null) {
+            saveLogin(login);
+        } else if (!LOGIN_FILE.delete()) {
+            System.err.println("Failed to delete login file");
+        }
+        this.dealerLogin = login;
     }
 
     private void update() throws Exception {

@@ -41,7 +41,7 @@ public class LoginPanel extends JPanel {
         this.add(passwordLabel);
 
         this.responseLabel = new JLabel();
-        responseLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
+        responseLabel.setFont(new Font("Tahoma", Font.BOLD, 16));
         responseLabel.setBounds(34, 208, 342, 30);
         this.add(responseLabel);
 
