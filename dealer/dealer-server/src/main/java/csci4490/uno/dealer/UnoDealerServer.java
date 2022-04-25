@@ -28,7 +28,8 @@ import java.util.Objects;
 
 public class UnoDealerServer {
 
-    private static final String CONFIG_DIR_PATH = "./dealer/server/config";
+    private static final String CONFIG_DIR_PATH =
+            "./dealer/dealer-server/config";
     private static final File CONFIG_DIR = new File(CONFIG_DIR_PATH);
 
     /**
