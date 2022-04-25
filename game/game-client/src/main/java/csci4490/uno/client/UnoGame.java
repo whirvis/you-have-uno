@@ -22,7 +22,7 @@ public class UnoGame extends Thread {
     private static @NotNull UnoDealerClient createDealerClient() {
         InetSocketAddress official = UnoEndpoints.OFFICIAL;
 
-        String host = official.getAddress().getHostAddress();
+        String host = official.getHostString();
         int port = official.getPort();
 
         String addressProperty = System.getProperty("dealer_address");
