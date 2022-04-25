@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * A packet which can be sent and received over the network. This class must
@@ -17,6 +18,16 @@ import java.util.Objects;
  * @see #decode(ByteBuf)
  */
 public abstract class TavernPacket {
+
+    /* @formatter:off */
+    public static final short
+            ID_OPEN_TAVERN   = 0x01,
+            ID_JOIN_TAVERN   = 0x02,
+            ID_QUIT_TAVERN   = 0x03,
+            ID_PEER_MESSAGE  = 0x04,
+            ID_ACCEPT_JOIN   = 0xF1,
+            ID_DENY_JOIN     = 0xF2;
+    /* @formatter:on */
 
     /**
      * The ID of this packet. This is written to the internal buffer
@@ -77,6 +88,18 @@ public abstract class TavernPacket {
     }
 
     /**
+     * Reads an {@link InetSocketAddress} from the internal {@link #buffer}
+     * of this packet.
+     *
+     * @return the read address.
+     */
+    public @NotNull InetSocketAddress readAddress() {
+        String host = this.readString();
+        int port = buffer.readUnsignedShort();
+        return new InetSocketAddress(host, port);
+    }
+
+    /**
      * Writes an {@link InetSocketAddress} to the internal {@link #buffer}
      * of this packet. The host string of {@code address} is written first
      * using {@link #writeString(String)}. The port of {@code address} is
@@ -94,15 +117,31 @@ public abstract class TavernPacket {
     }
 
     /**
-     * Reads an {@link InetSocketAddress} from the internal {@link #buffer}
-     * of this packet.
+     * Reads a {@link UUID} from the internal {@link #buffer} of this packet.
      *
-     * @return the read address.
+     * @return the read UUID.
      */
-    public @NotNull InetSocketAddress readAddress() {
-        String host = this.readString();
-        int port = buffer.readUnsignedShort();
-        return new InetSocketAddress(host, port);
+    public @NotNull UUID readUUID() {
+        long mostSigBits = buffer.readLong();
+        long leastSigBits = buffer.readLong();
+        return new UUID(mostSigBits, leastSigBits);
+    }
+
+    /**
+     * Writes a {@link UUID} to the internal {@link #buffer} of this packet.
+     * Bot the most significant bits and least significant bits are written
+     * as a {@code signed long}. The most significant bits are written first,
+     * and the least significant bits are written last.
+     *
+     * @param uuid the UUID to write.
+     * @return this packet.
+     * @throws NullPointerException if {@code uuid} is {@code null}.
+     */
+    public @NotNull TavernPacket writeUUID(@NotNull UUID uuid) {
+        Objects.requireNonNull(uuid, "uuid cannot be null");
+        buffer.writeLong(uuid.getMostSignificantBits());
+        buffer.writeLong(uuid.getLeastSignificantBits());
+        return this;
     }
 
     /**
