@@ -21,8 +21,8 @@ public class CreateAccountState extends UnoGameState<CreateAccountPanel> {
     @Override
     protected void leaveState() {
         panel.usernamePane.setText("");
-        panel.passwordPane.setText("");
-        panel.verifyPane.setText("");
+        panel.passwordField.setText("");
+        panel.verifyField.setText("");
     }
 
     @Override

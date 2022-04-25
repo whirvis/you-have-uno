@@ -16,9 +16,9 @@ public class CreateAccountPanel extends JPanel {
     public final JLabel passwordLabel;
     public final JLabel verifyLabel;
 
-    public final JEditorPane verifyPane;
     public final JEditorPane usernamePane;
-    public final JEditorPane passwordPane;
+    public final JPasswordField passwordField;
+    public final JPasswordField verifyField;
 
     public final JLabel instructionLabel;
     public final JButton submitButton;
@@ -47,13 +47,15 @@ public class CreateAccountPanel extends JPanel {
         verifyLabel.setBounds(31, 162, 144, 13);
         this.add(verifyLabel);
 
-        this.verifyPane = new JEditorPane();
-        verifyPane.setBounds(213, 156, 183, 19);
-        this.add(verifyPane);
+        this.passwordField = new JPasswordField();
+        passwordField.setEchoChar('*');
+        passwordField.setBounds(213, 125, 183, 19);
+        this.add(passwordField);
 
-        this.passwordPane = new JEditorPane();
-        passwordPane.setBounds(213, 125, 183, 19);
-        this.add(passwordPane);
+        this.verifyField = new JPasswordField();
+        verifyField.setEchoChar('*');
+        verifyField.setBounds(213, 156, 183, 19);
+        this.add(verifyField);
 
         this.usernamePane = new JEditorPane();
         usernamePane.setBounds(213, 91, 183, 19);

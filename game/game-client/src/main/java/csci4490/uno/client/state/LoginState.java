@@ -21,7 +21,7 @@ public class LoginState extends UnoGameState<LoginPanel> {
     @Override
     protected void leaveState() {
         panel.usernamePane.setText("");
-        panel.passwordPane.setText("");
+        panel.passwordField.setText("");
     }
 
     @Override

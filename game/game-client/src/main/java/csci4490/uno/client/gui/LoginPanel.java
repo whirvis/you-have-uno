@@ -10,10 +10,10 @@ public class LoginPanel extends JPanel {
     public final JLabel loginLabel;
     public final JLabel usernameLabel;
     public final JLabel passwordLabel;
-    public final JLabel errorLabel;
+    public final JLabel responseLabel;
     
     public final JEditorPane usernamePane;
-    public final JEditorPane passwordPane;
+    public final JPasswordField passwordField;
     
     public final JButton loginButton;
     public final JButton returnButton;
@@ -40,10 +40,10 @@ public class LoginPanel extends JPanel {
         passwordLabel.setBounds(34, 166, 99, 13);
         this.add(passwordLabel);
 
-        this.errorLabel = new JLabel();
-        errorLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
-        errorLabel.setBounds(34, 208, 342, 30);
-        this.add(errorLabel);
+        this.responseLabel = new JLabel();
+        responseLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
+        responseLabel.setBounds(34, 208, 342, 30);
+        this.add(responseLabel);
 
         this.loginButton = new JButton("Login");
         loginButton.setFont(new Font("Tahoma", Font.BOLD, 10));
@@ -59,9 +59,10 @@ public class LoginPanel extends JPanel {
         usernamePane.setBounds(156, 105, 219, 19);
         this.add(usernamePane);
 
-        this.passwordPane = new JEditorPane();
-        passwordPane.setBounds(156, 160, 220, 19);
-        this.add(passwordPane);
+        this.passwordField = new JPasswordField();
+        passwordField.setEchoChar('*');
+        passwordField.setBounds(156, 160, 220, 19);
+        this.add(passwordField);
     }
 	
 }
