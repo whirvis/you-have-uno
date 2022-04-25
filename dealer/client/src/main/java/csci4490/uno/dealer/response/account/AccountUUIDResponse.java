@@ -14,12 +14,16 @@ import java.util.UUID;
 /**
  * Contains the response of an UNO dealer server to the
  * {@value UnoEndpoints#UNO_ACCOUNT_UUID} endpoint.
- *
- * @see #getUUID()
  */
 public class AccountUUIDResponse extends UnoDealerResponse {
 
-    private final @Nullable UUID uuid;
+    /**
+     * The UUID will not be {@code null} if, and only if, the status code
+     * of this response is {@value HttpStatus#SC_OK} and an account with
+     * the request username exists. If it is {@code null}, make sure to
+     * check the status code.
+     */
+    public final @Nullable UUID uuid;
 
     /**
      * @param response the UNO dealer server's response.
@@ -31,22 +35,14 @@ public class AccountUUIDResponse extends UnoDealerResponse {
 
         if (status.getStatusCode() == HttpStatus.SC_OK) {
             JsonElement json = applicationJson.get("uuid");
-            this.uuid = UUID.fromString(json.getAsString());
+            if (!json.isJsonNull()) {
+                this.uuid = UUID.fromString(json.getAsString());
+            } else {
+                this.uuid = null;
+            }
         } else {
             this.uuid = null;
         }
-    }
-
-    /**
-     * The UUID will not be {@code null} if, and only if, the status code
-     * of this response is {@value HttpStatus#SC_OK}. If it is {@code null},
-     * make sure to check the status code.
-     *
-     * @return the UUID, {@code null} if the status code of the response
-     * is not {@value HttpStatus#SC_OK}.
-     */
-    public @Nullable UUID getUUID() {
-        return this.uuid;
     }
 
 }

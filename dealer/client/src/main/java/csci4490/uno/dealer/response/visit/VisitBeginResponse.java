@@ -16,12 +16,15 @@ import java.io.IOException;
 /**
  * Contains the response of an UNO dealer server to the
  * {@value UnoEndpoints#UNO_VISIT_BEGIN} endpoint.
- *
- * @see #getVisit()
  */
 public class VisitBeginResponse extends UnoDealerResponse {
 
-    private final @Nullable UnoVisit visit;
+    /**
+     * The visit will not be {@code null} if, and only if, the status code
+     * of this response is {@value HttpStatus#SC_OK}. If it is {@code null},
+     * make sure to check the status code.
+     */
+    public final @Nullable UnoVisit visit;
 
     /**
      * @param response the UNO dealer server's response.
@@ -37,18 +40,6 @@ public class VisitBeginResponse extends UnoDealerResponse {
         } else {
             this.visit = null;
         }
-    }
-
-    /**
-     * The visit will not be {@code null} if, and only if, the status code
-     * of this response is {@value HttpStatus#SC_OK}. If it is {@code null},
-     * make sure to check the status code.
-     *
-     * @return the UNO visit, {@code null} if the status code of the
-     * response is not {@value HttpStatus#SC_OK}.
-     */
-    public final @Nullable UnoVisit getVisit() {
-        return this.visit;
     }
 
 }

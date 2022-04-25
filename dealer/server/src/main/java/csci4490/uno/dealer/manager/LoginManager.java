@@ -1,10 +1,9 @@
 package csci4490.uno.dealer.manager;
 
 import csci4490.uno.commons.SaltGenerator;
+import csci4490.uno.dealer.StaticUnoAccount;
 import csci4490.uno.dealer.StaticUnoLogin;
-import csci4490.uno.dealer.UnoAccount;
 import csci4490.uno.dealer.UnoDealerServer;
-import csci4490.uno.dealer.UnoLogin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -97,9 +96,9 @@ public class LoginManager {
      * @throws SQLException          if an SQL error occurs.
      * @see #setAccountManager(AccountManager)
      */
-    public @Nullable UnoLogin loginAccount(@NotNull InetAddress address,
-                                           @NotNull UUID uuid,
-                                           @NotNull String password) throws SQLException {
+    public @Nullable StaticUnoLogin loginAccount(@NotNull InetAddress address,
+                                                 @NotNull UUID uuid,
+                                                 @NotNull String password) throws SQLException {
         Objects.requireNonNull(address, "address cannot be null");
         Objects.requireNonNull(uuid, "uuid cannot be null");
         Objects.requireNonNull(password, "password cannot be null");
@@ -131,7 +130,7 @@ public class LoginManager {
             stmt.execute();
         }
 
-        UnoAccount account = accountManager.getAccount(uuid);
+        StaticUnoAccount account = accountManager.getAccount(uuid);
         if (account == null) {
             String msg = "ghost login for account";
             msg += " with UUID " + uuid + ", this is a bug";

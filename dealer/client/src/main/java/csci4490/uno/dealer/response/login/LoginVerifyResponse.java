@@ -12,12 +12,15 @@ import java.io.IOException;
 /**
  * Contains the response of an UNO dealer server to the
  * {@value UnoEndpoints#UNO_LOGIN_VERIFY} endpoint.
- *
- * @see #wasVerified()
  */
 public class LoginVerifyResponse extends UnoDealerResponse {
 
-    private final boolean verified;
+    /**
+     * This will be {@code true} if, and only if, the status code of this
+     * response is {@value HttpStatus#SC_OK}. If it is {@code false}, make
+     * sure to check the status code.
+     */
+    public final boolean verified;
 
     /**
      * @param response the UNO dealer server's response.
@@ -32,18 +35,6 @@ public class LoginVerifyResponse extends UnoDealerResponse {
         } else {
             this.verified = false;
         }
-    }
-
-    /**
-     * This will be {@code true} if, and only if, the status code of this
-     * response is {@value HttpStatus#SC_OK}. If it is {@code false}, make
-     * sure to check the status code.
-     *
-     * @return {@code true} if the status code of the response is
-     * {@value HttpStatus#SC_OK}, {@code false} otherwise.
-     */
-    public boolean wasVerified() {
-        return this.verified;
     }
 
 }

@@ -16,12 +16,15 @@ import java.io.IOException;
 /**
  * Contains the response of an UNO dealer server to the
  * {@value UnoEndpoints#UNO_LOGIN} endpoint.
- *
- * @see #getLogin()
  */
 public class LoginResponse extends UnoDealerResponse {
 
-    private final @Nullable UnoLogin login;
+    /**
+     * The login will not be {@code null} if, and only if, the status code
+     * of this response is {@value HttpStatus#SC_OK}. If it is {@code null},
+     * make sure to check the status code.
+     */
+    public final @Nullable UnoLogin login;
 
     /**
      * @param response the UNO dealer server's response.
@@ -31,24 +34,12 @@ public class LoginResponse extends UnoDealerResponse {
     public LoginResponse(@NotNull HttpResponse response) throws IOException {
         super(response);
 
-        if(status.getStatusCode() == HttpStatus.SC_OK) {
+        if (status.getStatusCode() == HttpStatus.SC_OK) {
             JsonElement login = applicationJson.get("login");
             this.login = UnoJson.fromJson(login, StaticUnoLogin.class);
         } else {
             this.login = null;
         }
-    }
-
-    /**
-     * The login will not be {@code null} if, and only if, the status code
-     * of this response is {@value HttpStatus#SC_OK}. If it is {@code null},
-     * make sure to check the status code.
-     *
-     * @return the UNO login, {@code null} if the status code of the
-     * response is not {@value HttpStatus#SC_OK}.
-     */
-    public @Nullable UnoLogin getLogin() {
-        return this.login;
     }
 
 }

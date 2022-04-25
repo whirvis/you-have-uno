@@ -103,7 +103,7 @@ public class AccountManager {
      * @throws NullPointerException if {@code uuid} is {@code null}.
      * @throws SQLException         if an SQL error occurs.
      */
-    public @Nullable UnoAccount getAccount(@NotNull UUID uuid) throws SQLException {
+    public @Nullable StaticUnoAccount getAccount(@NotNull UUID uuid) throws SQLException {
         Objects.requireNonNull(uuid, "uuid cannot be null");
 
         String sql = "SELECT * FROM account WHERE uuid = ?";
@@ -131,7 +131,7 @@ public class AccountManager {
      *                      {@code username} already exists.
      */
     /* @formatter:off */
-    public @NotNull UnoAccount
+    public @NotNull StaticUnoAccount
             createAccount(@NotNull String username,
                           @NotNull String password) throws SQLException {
         Objects.requireNonNull(username, "username cannot be null");

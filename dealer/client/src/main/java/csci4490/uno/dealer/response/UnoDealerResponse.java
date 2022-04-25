@@ -26,28 +26,28 @@ public abstract class UnoDealerResponse {
             MIME_TYPE_JSON = ContentType.APPLICATION_JSON.getMimeType();
     /* @formatter:on */
 
-    protected final @NotNull HttpResponse response;
-    protected final @NotNull HttpEntity entity;
-    protected final @NotNull StatusLine status;
-    protected final @NotNull ContentType type;
+    public final @NotNull HttpResponse response;
+    public final @NotNull HttpEntity entity;
+    public final @NotNull StatusLine status;
+    public final @NotNull ContentType type;
 
     /**
      * The response text. This will be {@code null} if the type of
      * {@link #response} is not {@link ContentType#TEXT_PLAIN}.
      */
-    protected final String plainText;
+    public final String plainText;
 
     /**
      * The response JSON. This will be {@code null} if the type of
      * {@link #response} is not {@link ContentType#APPLICATION_JSON}.
      */
-    protected final JsonObject applicationJson;
+    public final JsonObject applicationJson;
 
     /**
      * This is set to {@code true} when an unknown content type is found
      * in the {@link #response}. Otherwise, this is {@code false}.
      */
-    protected final boolean unknownContentType;
+    public final boolean unknownContentType;
 
     /**
      * Constructs a new {@code UnoDealerResponse}. This sets a few internal

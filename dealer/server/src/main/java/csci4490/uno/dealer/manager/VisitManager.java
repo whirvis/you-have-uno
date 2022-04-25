@@ -138,7 +138,7 @@ public class VisitManager {
      * @throws SQLException          if an SQL error occurs.
      */
     /* @formatter:off */
-    public @Nullable UnoVisit
+    public @Nullable StaticUnoVisit
             beginVisit(@NotNull InetAddress address, @NotNull UUID uuid,
                        @NotNull UUID accessToken) throws SQLException {
         Objects.requireNonNull(address, "address cannot be null");

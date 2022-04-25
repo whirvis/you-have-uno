@@ -1,8 +1,6 @@
 package csci4490.uno.dealer;
 
 import com.google.gson.annotations.SerializedName;
-import csci4490.uno.dealer.UnoAccount;
-import csci4490.uno.dealer.UnoLogin;
 import org.jetbrains.annotations.NotNull;
 
 import java.net.InetAddress;
@@ -37,7 +35,7 @@ public class StaticUnoLogin implements UnoLogin {
      *                              {@code accessToken}, or {@code expiration}
      *                              are {@code null}.
      */
-    public StaticUnoLogin(@NotNull UnoAccount account,
+    public StaticUnoLogin(@NotNull StaticUnoAccount account,
                           @NotNull InetAddress address,
                           @NotNull UUID accessToken,
                           @NotNull Date expiration) {

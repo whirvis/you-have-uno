@@ -58,7 +58,7 @@ public class LivingUnoVisit implements UnoVisit, Closeable {
         scheduler.scheduleForever(() -> {
             VisitPingResponse response = this.sendPing();
             long currentTime = System.currentTimeMillis();
-            if (response.wasSuccessful()) {
+            if (response.wasSuccessful) {
                 this.lastKeepAlive = currentTime;
             }
         }, PING_WAIT, PING_WAIT);
@@ -128,7 +128,7 @@ public class LivingUnoVisit implements UnoVisit, Closeable {
 
         scheduler.close();
         VisitEndResponse endResponse = this.endVisit();
-        this.endedGracefully = endResponse.endedGracefully();
+        this.endedGracefully = endResponse.endedGracefully;
 
         this.ended = true;
     }
