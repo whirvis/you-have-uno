@@ -11,7 +11,10 @@ public abstract class TavernPacket extends TcpPacket {
             ID_QUIT_TAVERN   = 0x03,
             ID_PEER_MESSAGE  = 0x04,
             ID_ACCEPT_JOIN   = 0xF1,
-            ID_DENY_JOIN     = 0xF2;
+            ID_DENY_JOIN     = 0xF2,
+            ID_PEER_JOINED   = 0xF3,
+            ID_PEER_QUIT     = 0xF4,
+            ID_NO_SUCH_PEER  = 0xF5;
     /* @formatter:on */
 
     /**
