@@ -34,7 +34,6 @@ import java.util.Objects;
 
 public class UnoGame extends Thread {
 
-
     private static final String CONFIG_DIR_PATH =
             "./dealer/dealer-client/config";
     private static final File CONFIG_DIR = new File(CONFIG_DIR_PATH);
@@ -340,6 +339,7 @@ public class UnoGame extends Thread {
         }
 
         frame.dispose();
+        scheduler.close();
     }
 
     public static void main(String[] args) {
