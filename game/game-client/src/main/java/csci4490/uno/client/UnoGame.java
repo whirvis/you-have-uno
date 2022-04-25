@@ -109,8 +109,10 @@ public class UnoGame extends Thread {
 
         if (LOGIN_FILE.exists()) {
             System.out.println("Located login file, verifying...");
-            scheduler.schedule(this::verifyLoginFile, 30, Duration.ZERO,
-                    Duration.ofSeconds(1));
+            ScheduledJob verifyLoginJob =
+                    scheduler.schedule(this::verifyLoginFile, 30,
+                            Duration.ZERO, Duration.ofSeconds(1));
+            verifyLoginJob.onFinish(job -> this.verifyingLogin = false);
         }
 
         this.frame = new JFrame(GAME_TITLE);
