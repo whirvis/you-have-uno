@@ -1,4 +1,4 @@
-package csci4490.uno.client;
+package csci4490.uno.client.gui;
 
 import javax.imageio.ImageIO;
 import javax.swing.Icon;

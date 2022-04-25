@@ -3,21 +3,12 @@
  * Score Board Panel
  */
 
-package csci4490.uno.client;
+package csci4490.uno.client.gui;
 
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
-
-import java.awt.Color;
-import javax.swing.JLabel;
-import java.awt.Font;
-import java.awt.Window;
-
-import javax.swing.JButton;
-import javax.swing.JComponent;
-
-import java.awt.event.ActionListener;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class ScoreBoardPanel extends JPanel
 {
@@ -34,11 +25,8 @@ public class ScoreBoardPanel extends JPanel
 	private JLabel fourthNumCards;
 	private JButton playAgainButton;
 	private JButton exitGameButton;
-	private MainFrame frame;
 	
 	public ScoreBoardPanel() {
-		
-		frame = new MainFrame();
 		
 		setBackground(new Color(0, 0, 0));
 		setForeground(new Color(255, 255, 255));
@@ -105,13 +93,6 @@ public class ScoreBoardPanel extends JPanel
 		add(fourthNumCards);
 		
 		playAgainButton = new JButton("Play Again");
-		playAgainButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-				frame.changeToHP(e);
-				
-			}
-		});
 		playAgainButton.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		playAgainButton.setBounds(70, 272, 99, 31);
 		add(playAgainButton);
