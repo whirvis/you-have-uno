@@ -112,6 +112,7 @@ public class UnoGame extends Thread {
                     scheduler.schedule(this::verifyLoginFile, 30,
                             Duration.ZERO, Duration.ofSeconds(1));
             verifyLoginJob.onFinish(job -> this.verifyingLogin = false);
+            verifyLoginJob.onCancel(job -> this.verifyingLogin = false);
         }
 
         this.frame = new JFrame(GAME_TITLE);
