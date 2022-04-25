@@ -4,7 +4,7 @@ import io.netty.channel.ChannelInitializer;
 import io.netty.channel.socket.SocketChannel;
 import org.jetbrains.annotations.NotNull;
 
-class TcpServerChannelInitializer extends ChannelInitializer<SocketChannel> {
+final class TcpServerChannelInitializer extends ChannelInitializer<SocketChannel> {
 
     private final @NotNull TcpServer server;
 

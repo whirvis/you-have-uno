@@ -205,7 +205,9 @@ public abstract class TcpServer {
      * @param callback the code to execute when a packet is received from
      *                 {@code client}. A value of {@code null} is permitted,
      *                 and will result in nothing being executed.
-     * @throws NullPointerException if {@code client} is {@code null}.
+     * @throws NullPointerException  if {@code client} is {@code null}.
+     * @throws IllegalStateException if {@code client} is not connected to
+     *                               the server.
      */
     public final void handlePackets(@NotNull TcpSession client,
                                     @Nullable BiConsumer<TcpSession, ByteBuf> callback) {
@@ -320,9 +322,6 @@ public abstract class TcpServer {
         this.shuttingDown = true;
         this.serverShutdownBegun();
 
-        /*
-         * Gracefully disconnect all currently connected clients.
-         */
         Iterator<TcpSession> clientsI = connected.values().iterator();
         while (clientsI.hasNext()) {
             TcpSession client = clientsI.next();
