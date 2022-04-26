@@ -8,6 +8,7 @@ import csci4490.uno.commons.scheduler.Scheduler;
 import csci4490.uno.commons.scheduler.ThreadedScheduler;
 import csci4490.uno.dealer.endpoint.Endpoints;
 import csci4490.uno.dealer.manager.AccountManager;
+import csci4490.uno.dealer.manager.GameManager;
 import csci4490.uno.dealer.manager.LoginManager;
 import csci4490.uno.dealer.manager.TavernManager;
 import csci4490.uno.dealer.manager.VisitManager;
@@ -20,12 +21,14 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Objects;
+import java.util.UUID;
 
 public class UnoDealerServer {
 
@@ -69,6 +72,7 @@ public class UnoDealerServer {
     private LoginManager loginManager;
     private VisitManager visitManager;
     private TavernManager tavernManager;
+    private GameManager gameManager;
     private boolean started;
 
     private UnoDealerServer() {
@@ -97,11 +101,15 @@ public class UnoDealerServer {
         this.loginManager = new LoginManager(dbConnection);
         this.visitManager = new VisitManager(dbConnection);
         this.tavernManager = new TavernManager(dbConnection);
+        this.gameManager = new GameManager(dbConnection);
 
         loginManager.setAccountManager(accountManager);
         visitManager.setAccountManager(accountManager);
 
         visitManager.setLoginManager(loginManager);
+
+        gameManager.setVisitManager(visitManager);
+        gameManager.setTavernManager(tavernManager);
     }
 
     private static @NotNull SslContextFactory getSSLContext() {
@@ -152,6 +160,7 @@ public class UnoDealerServer {
         Endpoints.register(webserver, loginManager.getWebManager());
         Endpoints.register(webserver, visitManager.getWebManager());
         Endpoints.register(webserver, tavernManager.getWebManager());
+        Endpoints.register(webserver, gameManager.getWebManager());
 
         visitManager.removeInactiveVisits(scheduler);
         tavernManager.removeInactiveVisits(scheduler);

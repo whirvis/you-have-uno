@@ -1,8 +1,11 @@
 package csci4490.uno.dealer;
 
+import csci4490.uno.commons.UnoJson;
 import csci4490.uno.dealer.response.account.AccountCreateResponse;
 import csci4490.uno.dealer.response.account.AccountInfoResponse;
 import csci4490.uno.dealer.response.account.AccountUUIDResponse;
+import csci4490.uno.dealer.response.game.GameCreateResponse;
+import csci4490.uno.dealer.response.game.GameInfoResponse;
 import csci4490.uno.dealer.response.login.LoginResponse;
 import csci4490.uno.dealer.response.login.LoginVerifyResponse;
 import csci4490.uno.dealer.response.tavern.TavernListResponse;
@@ -449,7 +452,7 @@ public class UnoDealerClient {
      *
      * @param port the tavern server port.
      * @return the response to the tavern register request.
-     * @throws IOException          if an I/O error occurs.
+     * @throws IOException if an I/O error occurs.
      * @see #getTaverns(int)
      */
     public @NotNull TavernRegisterResponse registerTavern(int port) throws IOException {
@@ -497,6 +500,36 @@ public class UnoDealerClient {
      */
     public @NotNull TavernListResponse getTaverns() throws IOException {
         return this.getTaverns(10);
+    }
+
+    public @NotNull GameCreateResponse createGame(@NotNull UUID hostId,
+                                                  @NotNull UUID lobbyId,
+                                                  @NotNull InetSocketAddress tavernAddress) throws IOException {
+        URI endpoint = this.getEndpoint(UNO_GAME_CREATE);
+        HttpPost post = new HttpPost(endpoint);
+
+        Map<String, Object> form = new HashMap<>();
+        form.put("uuid", hostId.toString());
+        form.put("lobby_id", lobbyId.toString());
+        form.put("tavern_ip", tavernAddress.getHostString());
+        form.put("tavern_port", tavernAddress.getPort());
+        post.setEntity(createForm(form));
+
+        try (CloseableHttpResponse response = http.execute(post)) {
+            return new GameCreateResponse(response);
+        }
+    }
+
+    public @NotNull GameInfoResponse getGame(@NotNull String code) throws IOException {
+        Map<String, Object> query = new HashMap<>();
+        query.put("code", code);
+
+        URI endpoint = this.getEndpoint(UNO_GAME_INFO, query);
+        HttpGet get = new HttpGet(endpoint);
+
+        try (CloseableHttpResponse response = http.execute(get)) {
+            return new GameInfoResponse(response);
+        }
     }
 
 }

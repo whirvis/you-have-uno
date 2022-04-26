@@ -10,6 +10,8 @@ import org.jetbrains.annotations.Nullable;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.InetSocketAddress;
+import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.util.Objects;
 
 public class UnoJson {
@@ -23,6 +25,10 @@ public class UnoJson {
             .setPrettyPrinting().serializeNulls()
             .registerTypeAdapter(InetSocketAddress.class,
                     new InetSocketAddressSerializer())
+            .registerTypeHierarchyAdapter(PublicKey.class,
+                    new PublicKeySerializer())
+            .registerTypeHierarchyAdapter(PrivateKey.class,
+                    new PrivateKeySerializer())
             .create();
 
     /**

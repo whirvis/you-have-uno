@@ -133,14 +133,14 @@ public abstract class TcpClient {
      * Called when client connection has failed. This usually occurs when
      * an exception is thrown by {@link #connected(TcpSession)}.
      * <p>
-     * <b>By default, this method does nothing.</b>
+     * <b>By default, this method prints the stack trace.</b>
      *
      * @param server the server which the client failed to connect to.
      * @param cause  the cause of failure.
      */
     protected void failedConnection(@NotNull TcpSession server,
                                     @NotNull Throwable cause) {
-        /* optional implement */
+        cause.printStackTrace();
     }
 
     /* package-private for TcpClientChannelHandler */
@@ -239,14 +239,14 @@ public abstract class TcpClient {
      * Called when server disconnection has failed. This usually occurs when
      * an exception is thrown by {@link #disconnected(TcpSession)}.
      * <p>
-     * <b>By default, this method does nothing.</b>
+     * <b>By default, this method prints the stack trace.</b>
      *
      * @param server the server the client failed to disconnect from.
      * @param cause  the cause of failure.
      */
     protected void failedDisconnection(@NotNull TcpSession server,
                                        @NotNull Throwable cause) {
-        /* optional implement */
+        cause.printStackTrace();
     }
 
     /**

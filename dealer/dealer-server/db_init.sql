@@ -36,13 +36,12 @@ CREATE TABLE
 IF NOT EXISTS
 game
 (
-    host_uuid          CHAR(36)                    NOT NULL,
-	keep_alive         BIGINT UNSIGNED             NOT NULL,
-    code               CHAR(6)         PRIMARY KEY NOT NULL,
-	name               VARCHAR(32)                 NOT NULL,
-	description        VARCHAR(128)                NOT NULL,
-	player_cnt         SMALLINT                    NOT NULL,
-	player_max         SMALLINT                    NOT NULL
+    code                CHAR(6)    PRIMARY KEY     NOT NULL,
+    host_uuid           CHAR(36)                   NOT NULL,
+    lobby_id            CHAR(36)                   NOT NULL,
+    tavern_ip           VARBINARY(16)              NOT NULL,
+    tavern_port         INT UNSIGNED               NOT NULL,
+    public_key          BLOB(256)                  NOT NULL
 );
 
 CREATE TABLE

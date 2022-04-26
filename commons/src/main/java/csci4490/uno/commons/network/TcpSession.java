@@ -1,5 +1,6 @@
 package csci4490.uno.commons.network;
 
+import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import org.jetbrains.annotations.NotNull;
 
@@ -7,7 +8,6 @@ import java.io.Closeable;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
-import java.nio.ByteBuffer;
 import java.util.Objects;
 
 /**
@@ -47,26 +47,26 @@ public final class TcpSession implements Closeable {
 
     /**
      * @return the remote socket address.
-     * @see #getAddress()
+     * @see #getInetAddress()
      * @see #getPort()
      */
-    public @NotNull InetSocketAddress getInetAddress() {
+    public @NotNull InetSocketAddress getAddress() {
         return this.address;
     }
 
     /**
      * @return the address of the connection.
-     * @see #getInetAddress()
+     * @see #getAddress()
      * @see #getPort()
      */
-    public @NotNull InetAddress getAddress() {
+    public @NotNull InetAddress getInetAddress() {
         return address.getAddress();
     }
 
     /**
      * @return the port of the connection.
-     * @see #getInetAddress()
      * @see #getAddress()
+     * @see #getInetAddress()
      */
     public int getPort() {
         return address.getPort();
@@ -78,9 +78,9 @@ public final class TcpSession implements Closeable {
      * @param buffer the packet to send.
      * @throws NullPointerException if {@code buffer} is {@code null}.
      */
-    public void sendPacket(@NotNull ByteBuffer buffer) {
+    public void sendPacket(@NotNull ByteBuf buffer) {
         Objects.requireNonNull(buffer, "buffer cannot be null");
-        channel.write(buffer).syncUninterruptibly();
+        channel.write(buffer);
         channel.flush(); /* force packet to send */
     }
 

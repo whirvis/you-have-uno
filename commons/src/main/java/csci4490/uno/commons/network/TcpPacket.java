@@ -177,7 +177,6 @@ public abstract class TcpPacket {
         ByteBuf buffer = Unpooled.buffer();
         this.encode(buffer);
         session.sendPacket(buffer);
-        buffer.release();
 
         return this;
     }

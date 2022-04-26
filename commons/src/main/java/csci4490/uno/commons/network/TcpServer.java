@@ -67,7 +67,7 @@ public abstract class TcpServer {
          * channel immediately and return from this method. The server
          * should not be notified that the client was connected.
          */
-        if (blocked.contains(connection.getAddress())) {
+        if (blocked.contains(connection.getInetAddress())) {
             connection.close();
             return;
         }
@@ -113,14 +113,14 @@ public abstract class TcpServer {
      * Called when client connection has failed. This usually occurs when
      * an exception is thrown by {@link #clientConnected(TcpSession)}.
      * <p>
-     * <b>By default, this method does nothing.</b>
+     * <b>By default, this method prints the stack trace.</b>
      *
      * @param client the client which failed to connect.
      * @param cause  the cause of failure.
      */
     protected void failedClientConnection(@NotNull TcpSession client,
                                           @NotNull Throwable cause) {
-        /* optional implement */
+        cause.printStackTrace();
     }
 
     /**
@@ -175,14 +175,14 @@ public abstract class TcpServer {
      * Called when client disconnection has failed. This usually occurs when
      * an exception is thrown by {@link #clientDisconnected(TcpSession)}.
      * <p>
-     * <b>By default, this method does nothing.</b>
+     * <b>By default, this method prints the stack trace.</b>
      *
      * @param client the client which failed to disconnect.
      * @param cause  the cause of failure.
      */
     protected void failedClientDisconnection(@NotNull TcpSession client,
                                              @NotNull Throwable cause) {
-        /* optional implement */
+        cause.printStackTrace();
     }
 
     /**

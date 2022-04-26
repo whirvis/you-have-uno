@@ -56,6 +56,13 @@ public class UnoEndpoints {
             UNO_TAVERN_UNREGISTER = "/uno/tavern/unregister",
             UNO_TAVERN_PING = "/uno/tavern/ping",
             UNO_TAVERN_LIST = "/uno/tavern/list";
+
+    /**
+     * Endpoints for UNO games.
+     */
+    public static final @NotNull String
+            UNO_GAME_CREATE = "/uno/game/create",
+            UNO_GAME_INFO = "/uno/game/info";
     /* @formatter:on */
 
 }
