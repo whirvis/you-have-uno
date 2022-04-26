@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.InetSocketAddress;
 import java.util.Objects;
 
 public class UnoJson {
@@ -19,7 +20,10 @@ public class UnoJson {
      * program are consistent.
      */
     public static final @NotNull Gson GSON = new GsonBuilder()
-            .setPrettyPrinting().serializeNulls().create();
+            .setPrettyPrinting().serializeNulls()
+            .registerTypeAdapter(InetSocketAddress.class,
+                    new InetSocketAddressSerializer())
+            .create();
 
     /**
      * Converts an {@code Object} to JSON.

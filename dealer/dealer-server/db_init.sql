@@ -45,5 +45,15 @@ game
 	player_max         SMALLINT                    NOT NULL
 );
 
+CREATE TABLE
+IF NOT EXISTS
+tavern
+(
+	ip_address         VARBINARY(16)   PRIMARY KEY NOT NULL,
+	port               INT UNSIGNED                NOT NULL,
+    keep_alive         BIGINT UNSIGNED             NOT NULL
+);
+
 DELETE FROM visit;
 DELETE FROM game;
+DELETE FROM tavern;

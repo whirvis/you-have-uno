@@ -5,6 +5,8 @@ import csci4490.uno.dealer.response.account.AccountInfoResponse;
 import csci4490.uno.dealer.response.account.AccountUUIDResponse;
 import csci4490.uno.dealer.response.login.LoginResponse;
 import csci4490.uno.dealer.response.login.LoginVerifyResponse;
+import csci4490.uno.dealer.response.tavern.TavernListResponse;
+import csci4490.uno.dealer.response.tavern.TavernRegisterResponse;
 import csci4490.uno.dealer.response.visit.VisitBeginResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -439,5 +441,62 @@ public class UnoDealerClient {
         }
     }
     /* @formatter:on */
+
+
+    /**
+     * Sends a tavern register request for a tavern server on this machine
+     * with the specified port to the UNO dealer server.
+     *
+     * @param port the tavern server port.
+     * @return the response to the tavern register request.
+     * @throws IOException          if an I/O error occurs.
+     * @see #getTaverns(int)
+     */
+    public @NotNull TavernRegisterResponse registerTavern(int port) throws IOException {
+        URI endpoint = this.getEndpoint(UNO_TAVERN_REGISTER);
+        HttpPost post = new HttpPost(endpoint);
+
+        Map<String, Object> form = new HashMap<>();
+        form.put("port", port);
+        post.setEntity(createForm(form));
+
+        try (CloseableHttpResponse response = http.execute(post)) {
+            return new TavernRegisterResponse(response);
+        }
+    }
+
+    /**
+     * Sends a tavern list request for the currently registered tavern
+     * servers to the UNO dealer server.
+     *
+     * @param max the maximum amount of servers to return.
+     * @return the response to the tavern list request.
+     * @throws IOException if an I/O error occurs.
+     * @see #registerTavern(int)
+     */
+    public @NotNull TavernListResponse getTaverns(int max) throws IOException {
+        Map<String, Object> query = new HashMap<>();
+        query.put("max", max);
+
+        URI endpoint = this.getEndpoint(UNO_TAVERN_LIST, query);
+        HttpGet get = new HttpGet(endpoint);
+
+        try (CloseableHttpResponse response = http.execute(get)) {
+            return new TavernListResponse(response);
+        }
+    }
+
+    /**
+     * Sends a tavern list request for the currently registered tavern
+     * servers to the UNO dealer server. No more than ten servers will
+     * be returned.
+     *
+     * @return the response to the tavern list request.
+     * @throws IOException if an I/O error occurs.
+     * @see #registerTavern(int)
+     */
+    public @NotNull TavernListResponse getTaverns() throws IOException {
+        return this.getTaverns(10);
+    }
 
 }

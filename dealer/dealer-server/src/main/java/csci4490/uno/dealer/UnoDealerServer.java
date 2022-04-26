@@ -9,6 +9,7 @@ import csci4490.uno.commons.scheduler.ThreadedScheduler;
 import csci4490.uno.dealer.endpoint.Endpoints;
 import csci4490.uno.dealer.manager.AccountManager;
 import csci4490.uno.dealer.manager.LoginManager;
+import csci4490.uno.dealer.manager.TavernManager;
 import csci4490.uno.dealer.manager.VisitManager;
 import io.javalin.Javalin;
 import org.eclipse.jetty.server.Connector;
@@ -67,6 +68,7 @@ public class UnoDealerServer {
     private AccountManager accountManager;
     private LoginManager loginManager;
     private VisitManager visitManager;
+    private TavernManager tavernManager;
     private boolean started;
 
     private UnoDealerServer() {
@@ -94,6 +96,7 @@ public class UnoDealerServer {
         this.accountManager = new AccountManager(dbConnection);
         this.loginManager = new LoginManager(dbConnection);
         this.visitManager = new VisitManager(dbConnection);
+        this.tavernManager = new TavernManager(dbConnection);
 
         loginManager.setAccountManager(accountManager);
         visitManager.setAccountManager(accountManager);
@@ -148,8 +151,10 @@ public class UnoDealerServer {
         Endpoints.register(webserver, accountManager.getWebManager());
         Endpoints.register(webserver, loginManager.getWebManager());
         Endpoints.register(webserver, visitManager.getWebManager());
+        Endpoints.register(webserver, tavernManager.getWebManager());
 
         visitManager.removeInactiveVisits(scheduler);
+        tavernManager.removeInactiveVisits(scheduler);
 
         webserver.start();
     }

@@ -47,6 +47,15 @@ public class UnoEndpoints {
             UNO_VISIT_BEGIN = "/uno/visit/begin",
             UNO_VISIT_END = "/uno/visit/end",
             UNO_VISIT_PING = "/uno/visit/ping";
+
+    /**
+     * Endpoints for UNO taverns.
+     */
+    public static final @NotNull String
+            UNO_TAVERN_REGISTER = "/uno/tavern/register",
+            UNO_TAVERN_UNREGISTER = "/uno/tavern/unregister",
+            UNO_TAVERN_PING = "/uno/tavern/ping",
+            UNO_TAVERN_LIST = "/uno/tavern/list";
     /* @formatter:on */
 
 }
