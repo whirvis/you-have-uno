@@ -16,14 +16,30 @@ class DeckTest {
 	@Test
 	void setUp()
 	{
-		assertTrue(deck.getPlayDeck().size() == 108);
+		assertTrue(deck.getPlayDeck().size() == 107);
+	}
+	
+	@Test
+	void testPlayergetHand()
+	{
+		Player p = new Player(hands.get(0),deck);
+		assertTrue(p.getHand().equals(deck.getHands().get(0)));
+	}
+	
+	@Test
+	void testPlayerDrawCardFromDeck()
+	{
+		Card c = deck.getTopCard();
+		Card c2 = player.drawCardFromDeck();
+		
+		assertTrue(c.equals(c2));
 	}
 	
 	@Test
 	void testDealCards() {
 		
 		deck.dealCards();
-		assertTrue(deck.getPlayDeck().size() == 87);
+		assertTrue(deck.getPlayDeck().size() == 86);
 		
 	}
 
@@ -31,14 +47,14 @@ class DeckTest {
 	void testDiscard() {
 		Deck deck = new Deck(3,game);
 		deck.discard(deck.getPlayDeck().get(0));
-		assertTrue(deck.getDiscards().size() == 1);
+		assertTrue(deck.getDiscards().size() == 2);
 	}
 
 	@Test
 	void testRemoveCard() {
 		Deck deck = new Deck(3,game);
 		deck.removeCard(deck.getPlayDeck().get(0));
-		assertTrue(deck.getPlayDeck().size() == 107);
+		assertTrue(deck.getPlayDeck().size() == 106);
 	}
 
 	@Test
@@ -50,14 +66,9 @@ class DeckTest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		assertTrue(player.getHand().getNumCards() == 1 && deck.getPlayDeck().size() == 107);
+		assertTrue(player.getHand().getNumCards() == 1);
 	}
 
-
-	@Test
-	void testGetHands() {
-		assertTrue(deck.getHands().size() == 3);
-	}
 
 	@Test
 	void testGetDiscards() {
@@ -70,7 +81,7 @@ class DeckTest {
 		}
 		int size_2 = deck.getDiscards().size();
 		
-		assertTrue(size_1 == 0 && size_2 == 108);
+		assertTrue(size_1 == 1 && size_2 == 108);
 	}
 
 	@Test
